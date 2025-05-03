@@ -1,20 +1,26 @@
 import { plants } from "../config/gcStorageConfig.js";
 import { MulterError } from "multer";
+import sharp from "sharp";
+
 const saveImage = async (req, res, next) => {
   if (!req.file) {
     return res.status(400).json({ error: "No file uploaded" });
   }
-
   try {
     const timestamp = new Date().toISOString().replace(/[-:.TZ]/g, "");
-    const filename = `${req.user.uid}_${timestamp}_${req.file.originalname}`;
+    const filename = `${req.user.uid}_${timestamp}_plant.webp`;
     console.log("Uploading file:", filename);
-    const blob = plants.file(filename);
+    const blob = plants.file(`${req.user.uid}/${filename}`);
     const blobStream = blob.createWriteStream({
       resumable: false,
-      contentType: req.file.mimetype,
+      contentType: "image/webp",
       predefinedAcl: "publicRead",
     });
+    const imageSharp = await sharp(req.file.buffer)
+      .webp({
+        quality: 60,
+      })
+      .toBuffer();
     blobStream.on("error", (error) => {
       console.error("Error uploading file:", error);
       return res.status(500).json({ error: "Error uploading file." });
@@ -27,7 +33,7 @@ const saveImage = async (req, res, next) => {
       next();
     });
 
-    blobStream.end(req.file.buffer);
+    blobStream.end(imageSharp);
   } catch (error) {
     console.error("Error uploading file:", error);
     return res.status(500).json({ error: "Error uploading file." });
