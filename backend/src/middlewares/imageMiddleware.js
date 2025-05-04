@@ -8,9 +8,11 @@ const saveImage = async (req, res, next) => {
   }
   try {
     const timestamp = new Date().toISOString().replace(/[-:.TZ]/g, "");
-    const filename = `${req.user.uid}_${timestamp}_plant.webp`;
+    const filename = `${req.user.uid}_${timestamp}.webp`;
     console.log("Uploading file:", filename);
-    const blob = plants.file(`${req.user.uid}/${filename}`);
+    const blob = plants.file(
+      `${req.user.uid}/${req.file.fieldname}/${filename}`
+    );
     const blobStream = blob.createWriteStream({
       resumable: false,
       contentType: "image/webp",
@@ -22,8 +24,8 @@ const saveImage = async (req, res, next) => {
       })
       .toBuffer();
     blobStream.on("error", (error) => {
-      console.error("Error uploading file:", error);
-      return res.status(500).json({ error: "Error uploading file." });
+      console.error("Error Saving file:", error);
+      return res.status(500).json({ error: "Error Saving file." });
     });
 
     blobStream.on("finish", () => {
@@ -35,8 +37,8 @@ const saveImage = async (req, res, next) => {
 
     blobStream.end(imageSharp);
   } catch (error) {
-    console.error("Error uploading file:", error);
-    return res.status(500).json({ error: "Error uploading file." });
+    console.error("Error Saving file:", error);
+    return res.status(500).json({ error: "Error Saving file." });
   }
 };
 
@@ -47,9 +49,7 @@ const multerErrorHandler = (err, req, res, next) => {
         .status(400)
         .json({ error: "File size is too large! Max 5MB allowed." });
     } else if (err.code === "LIMIT_UNEXPECTED_FILE") {
-      return res
-        .status(400)
-        .json({ error: "Unexpected field! Only 'plantImage' is allowed." });
+      return res.status(400).json({ error: "Unexpected field!" });
     }
     return res.status(400).json({ error: `Multer error: ${err.message}` });
   } else if (err) {
