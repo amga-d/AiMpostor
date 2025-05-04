@@ -1,7 +1,7 @@
 import { getChat, listChats } from "../models/chatModel.js";
 
 // Get chat by ID for a user
-const getChatController = async (req, res) => {
+const getChatById = async (req, res) => {
   const userId = req.user.uid;
   const chatId = req.params.chatId;
   if (!chatId) {
@@ -19,7 +19,7 @@ const getChatController = async (req, res) => {
         data: response.data,
       });
     } else {
-      return res.status(200).json({
+      return res.status(404).json({
         success: false,
         message: response.message,
       });
@@ -33,28 +33,25 @@ const getChatController = async (req, res) => {
 };
 
 // List all chats for a user
-const listChatsController = async (req, res) => {
+const getAllChats = async (req, res) => {
   const userId = req.user.uid;
   try {
     const response = await listChats(userId);
     if (response.success) {
       return res.status(200).json({
-        success: true,
-        message: "Chats retrieved successfully",
         data: response.data,
       });
     } else {
       return res.status(200).json({
-        success: false,
         message: response.message,
+        data: [],
       });
     }
   } catch (error) {
     return res.status(500).json({
-      success: false,
       message: error.message,
     });
   }
 };
 
-export { listChatsController, getChatController };
+export { getAllChats, getChatById };

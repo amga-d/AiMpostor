@@ -11,7 +11,7 @@ import {
 export const predictDisease = async (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ error: "No image uploaded." });
+      return res.status(400).json({ error: "Please upload an image file." });
     }
 
     // const conversationId =

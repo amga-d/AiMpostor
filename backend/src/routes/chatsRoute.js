@@ -1,9 +1,6 @@
 import { Router } from "express";
 import { verifyUser } from "../middlewares/userMiddleware.js";
-import {
-  getChatController,
-  listChatsController,
-} from "../controllers/chatsController.js";
+import { getChatById, getAllChats } from "../controllers/chatsController.js";
 import {
   predictDisease,
   chatWithModel,
@@ -18,10 +15,10 @@ const router = Router();
 
 // Chat endpoint
 // list all chats for a user
-router.get("/", verifyUser, listChatsController);
+router.get("/", verifyUser, getAllChats);
 
 // get chat by id for a user
-router.get("/:chatId", verifyUser, getChatController);
+router.get("/:chatId", verifyUser, getChatById);
 
 // upload Image
 router.post(

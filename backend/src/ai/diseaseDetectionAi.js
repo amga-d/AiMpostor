@@ -1,21 +1,21 @@
 import Ajv from "ajv";
 import diseaseSchema from "../schemas/detectionResponseSchema.js";
 import {
-  getmModelInstance,
+  getModelInstance,
   generationConfig,
   safetySettings,
-  toolConfig,
+  disToolConfig,
   chatbotSysInstruction,
 } from "../config/genAiConfig.js";
 
 // Function to generate a structured response from Gemini
 async function generateDiseasePrediction(imageContent) {
-  const model = getmModelInstance();
+  const model = getModelInstance();
   const ModelConfig = generationConfig();
   const chat = model.startChat({
     ...ModelConfig,
     safetySettings,
-    tools: [toolConfig],
+    tools: [disToolConfig],
     // history: previousMessages, // Use previous messages for chat history
   });
 
@@ -36,8 +36,6 @@ If the image does not contain a plant, respond with a message explaining that yo
     const response = result.response;
 
     if (response.candidates && response.candidates.length > 0) {
-      const content = response.candidates[0].content;
-
       const functionCall = response.functionCalls();
       if (functionCall && functionCall.length > 0) {
         if (functionCall[0]) {
@@ -83,7 +81,7 @@ If the image does not contain a plant, respond with a message explaining that yo
 }
 
 async function generateContentResponse(previousMessages, message) {
-  const model = getmModelInstance(chatbotSysInstruction);
+  const model = getModelInstance(chatbotSysInstruction);
   const ModelConfig = generationConfig(0.6, 1000);
   const chat = model.startChat({
     ...ModelConfig,

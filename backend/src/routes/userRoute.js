@@ -1,4 +1,4 @@
-import { auth, db } from "../config/firebaseConfig.js";
+import { db } from "../config/firebaseConfig.js";
 import { FieldValue } from "firebase-admin/firestore";
 import { Router } from "express";
 import { verifyUser } from "../middlewares/userMiddleware.js";
