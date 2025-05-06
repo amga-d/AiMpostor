@@ -1,15 +1,24 @@
 import express from "express";
 import cors from "cors";
+import morgan from "morgan";
 
 import { PORT } from "./src/config/envConfig.js";
 
 import chatsRoute from "./src/routes/chatsRoute.js";
 import userRoute from "./src/routes/userRoute.js";
 import seedRoute from "./src/routes/seedRoute.js";
+
+// Inizialize the logger function
+const logger = morgan("tiny");
+
 const app = express();
 
 // Middleware to enable CORS
 app.use(cors());
+
+// Middleware to log requests
+app.use(logger);
+
 // Middleware to parse JSON and URL-encoded data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
