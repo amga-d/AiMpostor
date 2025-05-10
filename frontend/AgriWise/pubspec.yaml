@@ -38,6 +38,7 @@ dependencies:
   flutter_svg: ^2.1.0
   firebase_auth: ^5.5.3
   fluttertoast: ^8.2.12
+  intl: ^0.20.2
 
 dev_dependencies:
   flutter_test:
@@ -67,6 +68,10 @@ flutter:
     - assets/icons/logo.svg
     - assets/icons/logos_facebook.svg
     - assets/icons/x.svg
+    - assets/icons/disease_detection.svg
+    - assets/icons/ferilizer_recipe.svg
+    - assets/icons/pest_forecast.svg
+    - assets/icons/seeding_quality.svg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 
