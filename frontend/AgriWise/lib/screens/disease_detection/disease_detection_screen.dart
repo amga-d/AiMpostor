@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:aim_testing/screens/disease_detection/photo_preview_screen.dart';
+import 'package:agriwise/screens/disease_detection/photo_preview_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:io';
@@ -64,10 +64,7 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(25),
-          border: Border.all(
-            color: Color(0xffA8A8A8),
-            width: 1,
-          ),
+          border: Border.all(color: Color(0xffA8A8A8), width: 1),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -146,29 +143,19 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
             Row(
               children: [
                 Expanded(
-                  child: Container(
-                    height: 1,
-                    color: Colors.grey.shade300,
-                  ),
+                  child: Container(height: 1, color: Colors.grey.shade300),
                 ),
                 SizedBox(width: 8), // control spacing between line and "or"
                 Text(
                   'or',
-                  style: TextStyle(
-                    color: Colors.grey.shade500,
-                    fontSize: 14,
-                  ),
+                  style: TextStyle(color: Colors.grey.shade500, fontSize: 14),
                 ),
                 SizedBox(width: 8), // control spacing between "or" and line
                 Expanded(
-                  child: Container(
-                    height: 1,
-                    color: Colors.grey.shade300,
-                  ),
+                  child: Container(height: 1, color: Colors.grey.shade300),
                 ),
               ],
             ),
-
 
             const SizedBox(height: 15),
             // Choose from album button
@@ -209,9 +196,9 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
       }
     } catch (e) {
       // Handle camera error
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Camera error: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Camera error: $e')));
     }
   }
 
@@ -224,9 +211,9 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
       }
     } catch (e) {
       // Handle gallery error
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gallery error: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Gallery error: $e')));
     }
   }
 
@@ -254,10 +241,7 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
                 SizedBox(width: 10),
                 Text(
                   'History',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -266,10 +250,7 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Text(
               'Recent',
-              style: TextStyle(
-                color: Colors.grey,
-                fontSize: 14,
-              ),
+              style: TextStyle(color: Colors.grey, fontSize: 14),
             ),
           ),
           const SizedBox(height: 10),
@@ -278,10 +259,7 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
           ListTile(
             title: const Text(
               'How serious is B...',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 16,
-              ),
+              style: TextStyle(color: Colors.black, fontSize: 16),
             ),
             onTap: () {
               Navigator.pop(context);
@@ -306,9 +284,7 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
             offset: Offset(0, -1),
           ),
         ],
-        border: Border(
-          top: BorderSide(color: Colors.grey.shade300, width: 1),
-        ),
+        border: Border(top: BorderSide(color: Colors.grey.shade300, width: 1)),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 15),
@@ -331,10 +307,7 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
       children: [
         Icon(icon, color: color),
         const SizedBox(height: 4),
-        Text(
-          label,
-          style: TextStyle(color: color, fontSize: 12),
-        ),
+        Text(label, style: TextStyle(color: color, fontSize: 12)),
       ],
     );
   }

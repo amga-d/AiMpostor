@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:aim_testing/screens/seeding_quality/analyzing_screen.dart';
+import 'package:agriwise/screens/seeding_quality/analyzing_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
 class SeedingQualityPhotoPreviewScreen extends StatelessWidget {
   final XFile imageFile;
 
-  const SeedingQualityPhotoPreviewScreen({
-    Key? key,
-    required this.imageFile,
-  }) : super(key: key);
+  const SeedingQualityPhotoPreviewScreen({Key? key, required this.imageFile})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -51,10 +49,7 @@ class SeedingQualityPhotoPreviewScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
-            border: Border.all(
-              color: const Color(0xffA8A8A8),
-              width: 1,
-            ),
+            border: Border.all(color: const Color(0xffA8A8A8), width: 1),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -72,10 +67,7 @@ class SeedingQualityPhotoPreviewScreen extends StatelessWidget {
               const SizedBox(height: 8),
               const Text(
                 'Please confirm if you want to use this\nphoto',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.black87,
-                ),
+                style: TextStyle(fontSize: 14, color: Colors.black87),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 24),
@@ -162,7 +154,8 @@ class SeedingQualityPhotoPreviewScreen extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => SeedingQualityAnalyzingScreen(imageFile: imageFile),
+        builder:
+            (context) => SeedingQualityAnalyzingScreen(imageFile: imageFile),
       ),
     );
   }
@@ -180,9 +173,7 @@ class SeedingQualityPhotoPreviewScreen extends StatelessWidget {
             offset: const Offset(0, -1),
           ),
         ],
-        border: Border(
-          top: BorderSide(color: Colors.grey.shade300, width: 1),
-        ),
+        border: Border(top: BorderSide(color: Colors.grey.shade300, width: 1)),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 15),
@@ -205,10 +196,7 @@ class SeedingQualityPhotoPreviewScreen extends StatelessWidget {
       children: [
         Icon(icon, color: color),
         const SizedBox(height: 4),
-        Text(
-          label,
-          style: TextStyle(color: color, fontSize: 12),
-        ),
+        Text(label, style: TextStyle(color: color, fontSize: 12)),
       ],
     );
   }

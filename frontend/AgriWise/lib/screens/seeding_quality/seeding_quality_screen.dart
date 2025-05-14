@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:aim_testing/screens/seeding_quality/photo_preview_screen.dart';
+import 'package:agriwise/screens/seeding_quality/photo_preview_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:io';
@@ -57,10 +57,7 @@ class _SeedingQualityScreenState extends State<SeedingQualityScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
-            border: Border.all(
-              color: Color(0xffA8A8A8),
-              width: 1,
-            ),
+            border: Border.all(color: Color(0xffA8A8A8), width: 1),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -139,25 +136,16 @@ class _SeedingQualityScreenState extends State<SeedingQualityScreen> {
               Row(
                 children: [
                   Expanded(
-                    child: Container(
-                      height: 1,
-                      color: Colors.grey.shade300,
-                    ),
+                    child: Container(height: 1, color: Colors.grey.shade300),
                   ),
                   SizedBox(width: 8), // control spacing between line and "or"
                   Text(
                     'or',
-                    style: TextStyle(
-                      color: Colors.grey.shade500,
-                      fontSize: 14,
-                    ),
+                    style: TextStyle(color: Colors.grey.shade500, fontSize: 14),
                   ),
                   SizedBox(width: 8), // control spacing between "or" and line
                   Expanded(
-                    child: Container(
-                      height: 1,
-                      color: Colors.grey.shade300,
-                    ),
+                    child: Container(height: 1, color: Colors.grey.shade300),
                   ),
                 ],
               ),
@@ -203,9 +191,9 @@ class _SeedingQualityScreenState extends State<SeedingQualityScreen> {
       }
     } catch (e) {
       // Handle camera error
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Camera error: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Camera error: $e')));
     }
   }
 
@@ -218,9 +206,9 @@ class _SeedingQualityScreenState extends State<SeedingQualityScreen> {
       }
     } catch (e) {
       // Handle gallery error
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gallery error: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Gallery error: $e')));
     }
   }
 
@@ -229,7 +217,8 @@ class _SeedingQualityScreenState extends State<SeedingQualityScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => SeedingQualityPhotoPreviewScreen(imageFile: imageFile),
+        builder:
+            (context) => SeedingQualityPhotoPreviewScreen(imageFile: imageFile),
       ),
     );
   }
@@ -248,10 +237,7 @@ class _SeedingQualityScreenState extends State<SeedingQualityScreen> {
                 SizedBox(width: 10),
                 Text(
                   'History',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -260,10 +246,7 @@ class _SeedingQualityScreenState extends State<SeedingQualityScreen> {
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Text(
               'Recent',
-              style: TextStyle(
-                color: Colors.grey,
-                fontSize: 14,
-              ),
+              style: TextStyle(color: Colors.grey, fontSize: 14),
             ),
           ),
           const SizedBox(height: 10),
@@ -272,10 +255,7 @@ class _SeedingQualityScreenState extends State<SeedingQualityScreen> {
           ListTile(
             title: const Text(
               'Seed quality check - 3 May',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 16,
-              ),
+              style: TextStyle(color: Colors.black, fontSize: 16),
             ),
             onTap: () {
               Navigator.pop(context);
@@ -299,9 +279,7 @@ class _SeedingQualityScreenState extends State<SeedingQualityScreen> {
             offset: const Offset(0, -1),
           ),
         ],
-        border: Border(
-          top: BorderSide(color: Colors.grey.shade300, width: 1),
-        ),
+        border: Border(top: BorderSide(color: Colors.grey.shade300, width: 1)),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 15),
@@ -324,10 +302,7 @@ class _SeedingQualityScreenState extends State<SeedingQualityScreen> {
       children: [
         Icon(icon, color: color),
         const SizedBox(height: 4),
-        Text(
-          label,
-          style: TextStyle(color: color, fontSize: 12),
-        ),
+        Text(label, style: TextStyle(color: color, fontSize: 12)),
       ],
     );
   }

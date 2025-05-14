@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:aim_testing/screens/disease_detection/result_screen.dart';
+import 'package:agriwise/screens/disease_detection/result_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:async';
@@ -7,10 +7,7 @@ import 'dart:async';
 class AnalyzingScreen extends StatefulWidget {
   final XFile imageFile;
 
-  const AnalyzingScreen({
-    Key? key,
-    required this.imageFile,
-  }) : super(key: key);
+  const AnalyzingScreen({Key? key, required this.imageFile}) : super(key: key);
 
   @override
   State<AnalyzingScreen> createState() => _AnalyzingScreenState();
@@ -82,10 +79,7 @@ class _AnalyzingScreenState extends State<AnalyzingScreen> {
         centerTitle: true,
         title: const Text(
           'Disease Detection',
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.w500,
-          ),
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
@@ -127,10 +121,7 @@ class _AnalyzingScreenState extends State<AnalyzingScreen> {
             const SizedBox(height: 24),
             Text(
               'Analyzing Image${'.' * _dotCount}',
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             const Padding(
@@ -138,10 +129,7 @@ class _AnalyzingScreenState extends State<AnalyzingScreen> {
               child: Text(
                 'Please wait while we scan your plant\nfor potential diseases using AI.',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.black87,
-                ),
+                style: TextStyle(fontSize: 14, color: Colors.black87),
               ),
             ),
             const SizedBox(height: 30),
