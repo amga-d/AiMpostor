@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:aim_testing/screens/seeding_quality/result_screen.dart';
+import 'package:agriwise/screens/seeding_quality/result_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:async';
 
 class SeedingQualityAnalyzingScreen extends StatefulWidget {
   final XFile imageFile;
 
-  const SeedingQualityAnalyzingScreen({
-    Key? key,
-    required this.imageFile,
-  }) : super(key: key);
+  const SeedingQualityAnalyzingScreen({Key? key, required this.imageFile})
+    : super(key: key);
 
   @override
-  State<SeedingQualityAnalyzingScreen> createState() => _SeedingQualityAnalyzingScreenState();
+  State<SeedingQualityAnalyzingScreen> createState() =>
+      _SeedingQualityAnalyzingScreenState();
 }
 
-class _SeedingQualityAnalyzingScreenState extends State<SeedingQualityAnalyzingScreen> {
+class _SeedingQualityAnalyzingScreenState
+    extends State<SeedingQualityAnalyzingScreen> {
   int _dotCount = 1;
   Timer? _timer;
 
@@ -38,7 +38,9 @@ class _SeedingQualityAnalyzingScreenState extends State<SeedingQualityAnalyzingS
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => SeedingQualityResultScreen(imageFile: widget.imageFile),
+          builder:
+              (context) =>
+                  SeedingQualityResultScreen(imageFile: widget.imageFile),
         ),
       );
     });
@@ -106,10 +108,7 @@ class _SeedingQualityAnalyzingScreenState extends State<SeedingQualityAnalyzingS
             const SizedBox(height: 24),
             Text(
               'Analyzing Image${'.' * _dotCount}',
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             const Padding(
@@ -117,10 +116,7 @@ class _SeedingQualityAnalyzingScreenState extends State<SeedingQualityAnalyzingS
               child: Text(
                 'Please wait while we scan your seed for quality assessment using AI.',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.black87,
-                ),
+                style: TextStyle(fontSize: 14, color: Colors.black87),
               ),
             ),
             const SizedBox(height: 30),
@@ -147,9 +143,7 @@ class _SeedingQualityAnalyzingScreenState extends State<SeedingQualityAnalyzingS
             offset: const Offset(0, -1),
           ),
         ],
-        border: Border(
-          top: BorderSide(color: Colors.grey.shade300, width: 1),
-        ),
+        border: Border(top: BorderSide(color: Colors.grey.shade300, width: 1)),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 15),
@@ -172,10 +166,7 @@ class _SeedingQualityAnalyzingScreenState extends State<SeedingQualityAnalyzingS
       children: [
         Icon(icon, color: color),
         const SizedBox(height: 4),
-        Text(
-          label,
-          style: TextStyle(color: color, fontSize: 12),
-        ),
+        Text(label, style: TextStyle(color: color, fontSize: 12)),
       ],
     );
   }

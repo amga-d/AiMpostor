@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:aim_testing/screens/disease_detection/analyzing_screen.dart';
+import 'package:agriwise/screens/disease_detection/analyzing_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:io';
@@ -7,10 +7,8 @@ import 'dart:io';
 class PhotoPreviewScreen extends StatelessWidget {
   final XFile imageFile;
 
-  const PhotoPreviewScreen({
-    Key? key,
-    required this.imageFile,
-  }) : super(key: key);
+  const PhotoPreviewScreen({Key? key, required this.imageFile})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,13 +34,14 @@ class PhotoPreviewScreen extends StatelessWidget {
         ),
         actions: [
           Builder(
-            builder: (context) => IconButton(
-              icon: const Icon(Icons.history, color: Colors.black),
-              onPressed: () {
-                // Show history drawer
-                Scaffold.of(context).openEndDrawer();
-              },
-            ),
+            builder:
+                (context) => IconButton(
+                  icon: const Icon(Icons.history, color: Colors.black),
+                  onPressed: () {
+                    // Show history drawer
+                    Scaffold.of(context).openEndDrawer();
+                  },
+                ),
           ),
         ],
       ),
@@ -55,10 +54,7 @@ class PhotoPreviewScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
-            border: Border.all(
-              color: const Color(0xffA8A8A8),
-              width: 1,
-            ),
+            border: Border.all(color: const Color(0xffA8A8A8), width: 1),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -76,10 +72,7 @@ class PhotoPreviewScreen extends StatelessWidget {
               const SizedBox(height: 8),
               const Text(
                 'Please confirm if you want to use this\nphoto',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.black87,
-                ),
+                style: TextStyle(fontSize: 14, color: Colors.black87),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 24),
@@ -185,9 +178,7 @@ class PhotoPreviewScreen extends StatelessWidget {
             offset: const Offset(0, -1),
           ),
         ],
-        border: Border(
-          top: BorderSide(color: Colors.grey.shade300, width: 1),
-        ),
+        border: Border(top: BorderSide(color: Colors.grey.shade300, width: 1)),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 15),
@@ -210,10 +201,7 @@ class PhotoPreviewScreen extends StatelessWidget {
       children: [
         Icon(icon, color: color),
         const SizedBox(height: 4),
-        Text(
-          label,
-          style: TextStyle(color: color, fontSize: 12),
-        ),
+        Text(label, style: TextStyle(color: color, fontSize: 12)),
       ],
     );
   }
@@ -232,10 +220,7 @@ class PhotoPreviewScreen extends StatelessWidget {
                 SizedBox(width: 10),
                 Text(
                   'History',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -244,10 +229,7 @@ class PhotoPreviewScreen extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Text(
               'Recent',
-              style: TextStyle(
-                color: Colors.grey,
-                fontSize: 14,
-              ),
+              style: TextStyle(color: Colors.grey, fontSize: 14),
             ),
           ),
           const SizedBox(height: 10),
@@ -256,10 +238,7 @@ class PhotoPreviewScreen extends StatelessWidget {
           ListTile(
             title: const Text(
               'How serious is B...',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 16,
-              ),
+              style: TextStyle(color: Colors.black, fontSize: 16),
             ),
             onTap: () {
               Navigator.pop(context);

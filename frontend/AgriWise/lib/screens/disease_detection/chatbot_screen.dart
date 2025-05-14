@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:aim_testing/models/chat_message.dart';
-import 'package:aim_testing/screens/disease_detection/result_screen.dart';
+import 'package:agriwise/models/chat_message.dart';
+import 'package:agriwise/screens/disease_detection/result_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:io';
@@ -8,10 +8,7 @@ import 'dart:io';
 class ChatbotScreen extends StatefulWidget {
   final XFile imageFile;
 
-  const ChatbotScreen({
-    Key? key,
-    required this.imageFile,
-  }) : super(key: key);
+  const ChatbotScreen({Key? key, required this.imageFile}) : super(key: key);
 
   @override
   State<ChatbotScreen> createState() => _ChatbotScreenState();
@@ -34,7 +31,8 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
       timestamp: DateTime.now().subtract(const Duration(minutes: 4)),
     ),
     ChatMessage(
-      text: "Bacterial Leaf Blight can significantly reduce rice yield if left untreated, especially during the early growth stages. However, with prompt treatment and good field management, the damage can be minimized. Monitor your crops daily, apply recommended bactericides, and ensure proper irrigation practices.",
+      text:
+          "Bacterial Leaf Blight can significantly reduce rice yield if left untreated, especially during the early growth stages. However, with prompt treatment and good field management, the damage can be minimized. Monitor your crops daily, apply recommended bactericides, and ensure proper irrigation practices.",
       isUser: false,
       timestamp: DateTime.now().subtract(const Duration(minutes: 3)),
     ),
@@ -73,15 +71,14 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
         alignment: Alignment.topCenter,
         child: Container(
           width: 361,
-          height: MediaQuery.of(context).size.height - 140, // Adjust height as needed
+          height:
+              MediaQuery.of(context).size.height -
+              140, // Adjust height as needed
           margin: const EdgeInsets.only(top: 20),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(25),
-            border: Border.all(
-              color: const Color(0xffA8A8A8),
-              width: 1,
-            ),
+            border: Border.all(color: const Color(0xffA8A8A8), width: 1),
           ),
           child: Column(
             children: [
@@ -93,10 +90,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: Colors.grey.shade300,
-                      width: 1,
-                    ),
+                    border: Border.all(color: Colors.grey.shade300, width: 1),
                   ),
                   child: Column(
                     children: [
@@ -190,9 +184,10 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ResultScreen(
-                                  imageFile: widget.imageFile,
-                                ),
+                                builder:
+                                    (context) => ResultScreen(
+                                      imageFile: widget.imageFile,
+                                    ),
                               ),
                             );
                           },
@@ -225,7 +220,10 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
               Expanded(
                 child: ListView.builder(
                   controller: _scrollController,
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   itemCount: _messages.length,
                   itemBuilder: (context, index) {
                     return _buildMessage(_messages[index]);
@@ -309,11 +307,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
     // Add user message to chat
     setState(() {
       _messages.add(
-        ChatMessage(
-          text: messageText,
-          isUser: true,
-          timestamp: DateTime.now(),
-        ),
+        ChatMessage(text: messageText, isUser: true, timestamp: DateTime.now()),
       );
     });
 
@@ -333,7 +327,8 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
       setState(() {
         _messages.add(
           ChatMessage(
-            text: "Thank you for your question. I'll provide more detailed guidance on managing Bacterial Leaf Blight. Make sure to remove infected plant debris from the field and avoid working in fields when plants are wet.",
+            text:
+                "Thank you for your question. I'll provide more detailed guidance on managing Bacterial Leaf Blight. Make sure to remove infected plant debris from the field and avoid working in fields when plants are wet.",
             isUser: false,
             timestamp: DateTime.now(),
           ),
@@ -363,18 +358,12 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
         margin: const EdgeInsets.symmetric(vertical: 8),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: message.isUser
-              ? Colors.white
-              : const Color(0xFFF1F1F1),
+          color: message.isUser ? Colors.white : const Color(0xFFF1F1F1),
           borderRadius: BorderRadius.circular(16),
-          border: message.isUser
-              ? Border.all(color: Colors.grey.shade300)
-              : null,
+          border:
+              message.isUser ? Border.all(color: Colors.grey.shade300) : null,
         ),
-        child: Text(
-          message.text,
-          style: const TextStyle(fontSize: 14),
-        ),
+        child: Text(message.text, style: const TextStyle(fontSize: 14)),
       ),
     );
   }
@@ -392,9 +381,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
             offset: const Offset(0, -1),
           ),
         ],
-        border: Border(
-          top: BorderSide(color: Colors.grey.shade300, width: 1),
-        ),
+        border: Border(top: BorderSide(color: Colors.grey.shade300, width: 1)),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 15),
@@ -417,10 +404,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
       children: [
         Icon(icon, color: color),
         const SizedBox(height: 4),
-        Text(
-          label,
-          style: TextStyle(color: color, fontSize: 12),
-        ),
+        Text(label, style: TextStyle(color: color, fontSize: 12)),
       ],
     );
   }

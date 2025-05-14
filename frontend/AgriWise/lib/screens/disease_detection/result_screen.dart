@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:aim_testing/screens/disease_detection/chatbot_screen.dart';
+import 'package:agriwise/screens/disease_detection/chatbot_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
 class ResultScreen extends StatelessWidget {
   final XFile imageFile;
 
-  const ResultScreen({
-    Key? key,
-    required this.imageFile,
-  }) : super(key: key);
+  const ResultScreen({Key? key, required this.imageFile}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,10 +45,7 @@ class ResultScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
-            border: Border.all(
-              color: const Color(0xffA8A8A8),
-              width: 1,
-            ),
+            border: Border.all(color: const Color(0xffA8A8A8), width: 1),
           ),
           child: SingleChildScrollView(
             child: Column(
@@ -232,9 +226,7 @@ class ResultScreen extends StatelessWidget {
                                 const SizedBox(height: 8),
                                 const Text(
                                   'This disease causes yellowing and wilting of leaves. It spreads quickly in wet conditions and may lead to significant yield loss.',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                  ),
+                                  style: TextStyle(fontSize: 14),
                                 ),
                                 const SizedBox(height: 16),
                                 const Text(
@@ -248,7 +240,9 @@ class ResultScreen extends StatelessWidget {
                                 _buildBulletPoint('Remove affected leaves'),
                                 _buildBulletPoint('Avoid excessive watering'),
                                 _buildBulletPoint('Use resistant seed variety'),
-                                _buildBulletPoint('Apply appropriate bactericide'),
+                                _buildBulletPoint(
+                                  'Apply appropriate bactericide',
+                                ),
                               ],
                             ),
                           ),
@@ -269,7 +263,10 @@ class ResultScreen extends StatelessWidget {
                           ),
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            border: Border.all(width: 1, color: Color(0xffA8A8A8)),
+                            border: Border.all(
+                              width: 1,
+                              color: Color(0xffA8A8A8),
+                            ),
                             borderRadius: BorderRadius.circular(10),
                             boxShadow: [
                               BoxShadow(
@@ -299,10 +296,7 @@ class ResultScreen extends StatelessWidget {
                     children: [
                       const Text(
                         'Need expert guidance?',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.black87,
-                        ),
+                        style: TextStyle(fontSize: 14, color: Colors.black87),
                       ),
                       const SizedBox(height: 12),
                       SizedBox(
@@ -313,9 +307,9 @@ class ResultScreen extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ChatbotScreen(
-                                  imageFile: imageFile,
-                                ),
+                                builder:
+                                    (context) =>
+                                        ChatbotScreen(imageFile: imageFile),
                               ),
                             );
                           },
@@ -355,12 +349,7 @@ class ResultScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text('• ', style: TextStyle(fontSize: 14)),
-          Expanded(
-            child: Text(
-              text,
-              style: const TextStyle(fontSize: 14),
-            ),
-          ),
+          Expanded(child: Text(text, style: const TextStyle(fontSize: 14))),
         ],
       ),
     );
@@ -379,9 +368,7 @@ class ResultScreen extends StatelessWidget {
             offset: const Offset(0, -1),
           ),
         ],
-        border: Border(
-          top: BorderSide(color: Colors.grey.shade300, width: 1),
-        ),
+        border: Border(top: BorderSide(color: Colors.grey.shade300, width: 1)),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 15),
@@ -404,10 +391,7 @@ class ResultScreen extends StatelessWidget {
       children: [
         Icon(icon, color: color),
         const SizedBox(height: 4),
-        Text(
-          label,
-          style: TextStyle(color: color, fontSize: 12),
-        ),
+        Text(label, style: TextStyle(color: color, fontSize: 12)),
       ],
     );
   }
