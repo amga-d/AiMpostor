@@ -5,11 +5,21 @@ import 'dart:io';
 
 class ResultScreen extends StatelessWidget {
   final XFile imageFile;
+  final Map<String, dynamic> results;
 
-  const ResultScreen({Key? key, required this.imageFile}) : super(key: key);
+  const ResultScreen({required this.imageFile, required this.results})
+    : super();
 
   @override
   Widget build(BuildContext context) {
+    final response = results['response'] ?? {};
+    final crop = response['crop'] ?? 'Unknown';
+    final detectedDisease = response['detectedDisease'] ?? 'Unknown';
+    final riskLevel = response['riskLevel'] ?? 'Unknown';
+    final aboutDisease =
+        response['aboutDisease'] ?? 'No information available.';
+    final recommendedActions = response['recommendedAction'] ?? [];
+    final chatId = results['chatId'] ?? 'Unknown';
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -87,7 +97,7 @@ class ResultScreen extends StatelessWidget {
                             padding: const EdgeInsets.fromLTRB(20, 30, 20, 16),
                             decoration: BoxDecoration(
                               color: const Color(0xFFECF8ED),
-                              borderRadius: BorderRadius.only(
+                              borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(11),
                                 topRight: Radius.circular(11),
                               ),
@@ -95,108 +105,20 @@ class ResultScreen extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                // Results data
-                                const Row(
-                                  children: [
-                                    Expanded(
-                                      flex: 4,
-                                      child: Text(
-                                        'Crop',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(width: 4),
-                                    Text(
-                                      ':',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                    SizedBox(width: 4),
-                                    Expanded(
-                                      flex: 6,
-                                      child: Text(
-                                        'Rice (Padi)',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                                _buildResultRow('Crop', crop),
+                                const SizedBox(height: 6),
+                                _buildResultRow(
+                                  'Detected Disease',
+                                  detectedDisease,
                                 ),
                                 const SizedBox(height: 6),
-                                const Row(
-                                  children: [
-                                    Expanded(
-                                      flex: 4,
-                                      child: Text(
-                                        'Detected Disease',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(width: 4),
-                                    Text(
-                                      ':',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                    SizedBox(width: 4),
-                                    Expanded(
-                                      flex: 6,
-                                      child: Text(
-                                        'Bacterial Leaf',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 6),
-                                Row(
-                                  children: [
-                                    const Expanded(
-                                      flex: 4,
-                                      child: Text(
-                                        'Risk Level',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 4),
-                                    const Text(
-                                      ':',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 4),
-                                    Expanded(
-                                      flex: 6,
-                                      child: Text(
-                                        'High',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.red.shade700,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                                _buildResultRow(
+                                  'Risk Level',
+                                  riskLevel,
+                                  valueColor:
+                                      riskLevel == 'High'
+                                          ? Colors.red.shade700
+                                          : Colors.black,
                                 ),
                               ],
                             ),
@@ -206,7 +128,7 @@ class ResultScreen extends StatelessWidget {
                           Container(
                             width: double.infinity,
                             padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.only(
                                 bottomLeft: Radius.circular(11),
@@ -224,9 +146,9 @@ class ResultScreen extends StatelessWidget {
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                const Text(
-                                  'This disease causes yellowing and wilting of leaves. It spreads quickly in wet conditions and may lead to significant yield loss.',
-                                  style: TextStyle(fontSize: 14),
+                                Text(
+                                  aboutDisease,
+                                  style: const TextStyle(fontSize: 14),
                                 ),
                                 const SizedBox(height: 16),
                                 const Text(
@@ -237,11 +159,8 @@ class ResultScreen extends StatelessWidget {
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                _buildBulletPoint('Remove affected leaves'),
-                                _buildBulletPoint('Avoid excessive watering'),
-                                _buildBulletPoint('Use resistant seed variety'),
-                                _buildBulletPoint(
-                                  'Apply appropriate bactericide',
+                                ...recommendedActions.map<Widget>(
+                                  (action) => _buildBulletPoint(action),
                                 ),
                               ],
                             ),
@@ -265,14 +184,14 @@ class ResultScreen extends StatelessWidget {
                             color: Colors.white,
                             border: Border.all(
                               width: 1,
-                              color: Color(0xffA8A8A8),
+                              color: const Color(0xffA8A8A8),
                             ),
                             borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
+                            boxShadow: const [
                               BoxShadow(
                                 color: Color(0xffA8A8A8),
                                 blurRadius: 2,
-                                offset: const Offset(0, 1),
+                                offset: Offset(0, 1),
                               ),
                             ],
                           ),
@@ -308,8 +227,7 @@ class ResultScreen extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                 builder:
-                                    (context) =>
-                                        ChatbotScreen(imageFile: imageFile),
+                                    (context) => ChatbotScreen(chatId: chatId),
                               ),
                             );
                           },
@@ -342,6 +260,37 @@ class ResultScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildResultRow(String label, String value, {Color? valueColor}) {
+    return Row(
+      children: [
+        Expanded(
+          flex: 4,
+          child: Text(
+            label,
+            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+          ),
+        ),
+        const SizedBox(width: 4),
+        const Text(
+          ':',
+          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+        ),
+        const SizedBox(width: 4),
+        Expanded(
+          flex: 6,
+          child: Text(
+            value,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: valueColor ?? Colors.black,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildBulletPoint(String text) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 4),
@@ -355,7 +304,6 @@ class ResultScreen extends StatelessWidget {
     );
   }
 
-  // Bottom navigation bar
   Widget _buildBottomNavBar() {
     return Container(
       decoration: BoxDecoration(

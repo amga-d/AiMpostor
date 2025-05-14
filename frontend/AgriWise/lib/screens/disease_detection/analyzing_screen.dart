@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:agriwise/services/http_service.dart';
 import 'package:flutter/material.dart';
 import 'package:agriwise/screens/disease_detection/result_screen.dart';
 import 'package:image_picker/image_picker.dart';
@@ -33,33 +36,34 @@ class _AnalyzingScreenState extends State<AnalyzingScreen> {
       _timer?.cancel();
 
       // In a real app, you would poll the API for analysis results
-      /*
-      // Example of API consumption for getting analysis results:
-      ApiService().getAnalysisResults(widget.analyzeId).then((results) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ResultScreen(
-              imageFile: widget.imageFile,
-              results: results,
-            ),
-          ),
-        );
-      }).catchError((error) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $error')),
-        );
-        Navigator.pop(context);
-      });
-      */
+      HttpService()
+          .predictDisease(widget.imageFile)
+          .then((results) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder:
+                    (context) => ResultScreen(
+                      imageFile: widget.imageFile,
+                      results: results,
+                    ),
+              ),
+            );
+          })
+          .catchError((error) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text('Error: $error')));
+            Navigator.pop(context);
+          });
 
       // For now, just navigate to result screen
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ResultScreen(imageFile: widget.imageFile),
-        ),
-      );
+      // Navigator.pushReplacement(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) => ResultScreen(imageFile: widget.imageFile),
+      //   ),
+      // );
     });
   }
 
