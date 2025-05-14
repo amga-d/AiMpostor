@@ -4,9 +4,7 @@ import 'package:agriwise/screens/login_screen.dart';
 import 'package:agriwise/screens/register_screen.dart';
 import 'package:agriwise/screens/splash_screen.dart';
 import 'package:agriwise/screens/seeding_quality/seeding_quality_screen.dart';
-import 'package:agriwise/screens/seeding_quality/photo_preview_screen.dart';
-import 'package:agriwise/screens/seeding_quality/analyzing_screen.dart';
-import 'package:agriwise/screens/seeding_quality/result_screen.dart';
+import 'package:agriwise/screens/fertilizer_recipe/fertilizer_recipe_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -37,6 +35,8 @@ class MyApp extends StatelessWidget {
         '/splash': (context) => const SplashScreen(),
         '/seed_quality': (context) => const SeedingQualityScreen(),
         '/disease_detection': (context) => const DiseaseDetectionScreen(),
+
+
       },
     );
   }
