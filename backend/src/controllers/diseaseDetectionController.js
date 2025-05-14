@@ -56,23 +56,6 @@ export const predictDisease = async (req, res) => {
     if (!result.success) {
       throw new Error(result.message);
     }
-    // Store the conversation ID in the request body
-    // chatHistory[conversationId].push({
-    //   role: "user",
-    //   parts: [
-    //     {
-    //       text: "I uploaded a plant image for disease analysis.",
-    //     },
-    //   ],
-    // });
-
-    // Store model's message
-    // chatHistory[conversationId].push({
-    //   role: "model",
-    //   parts: result.error
-    //     ? [{ text: result.error }]
-    //     : [{ text: JSON.stringify(result) }],
-    // });
 
     res.json({ response, chatId: result.chatId });
   } catch (error) {
