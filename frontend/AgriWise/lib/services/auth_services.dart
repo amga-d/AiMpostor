@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:agriwise/services/http_service.dart';
 
 class AuthService {
   // signIn
@@ -41,6 +42,14 @@ class AuthService {
       UserCredential userCredentials = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
       await userCredentials.user?.updateProfile(displayName: name);
+
+      // Get the current user token
+      String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
+
+      if (token != null) {
+        // sent POSt to the server
+        await HttpService().signupUser(token, name);
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         throw 'The password provided is too weak.';
@@ -52,16 +61,6 @@ class AuthService {
     } catch (e) {
       throw Exception('Error signing up: $e');
     }
-    // save user data to Firestore or Realtime Database
-    // await FirebaseFirestore.instance
-    //     .collection('users')
-    //     .doc(userCredentials.user?.uid)
-    //     .set({
-    //   'name': name,
-    //   'email': email,
-    //   'createdAt': Timestamp.now(),
-    // });
-    // });
   }
 
   Future<void> signout({required BuildContext context}) async {

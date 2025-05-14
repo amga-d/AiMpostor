@@ -1,3 +1,4 @@
+import 'package:agriwise/screens/disease_detection/disease_detection_screen.dart';
 import 'package:agriwise/screens/home_screen.dart';
 import 'package:agriwise/screens/login_screen.dart';
 import 'package:agriwise/screens/register_screen.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const HomeScreen(),
         '/splash': (context) => const SplashScreen(),
         '/seed_quality': (context) => const SeedingQualityScreen(),
+        '/disease_detection': (context) => const DiseaseDetectionScreen(),
       },
     );
   }
@@ -102,9 +104,9 @@ class AuthWrapper extends StatelessWidget {
         } else if (snapshot.hasError) {
           return const Center(child: Text('Something went wrong'));
         } else if (snapshot.hasData) {
-          return const SeedingQualityScreen();
+          return const HomeScreen();
         } else {
-          return SeedingQualityScreen();
+          return SplashScreen();
         }
       },
     );

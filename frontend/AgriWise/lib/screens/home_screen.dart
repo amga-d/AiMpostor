@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:agriwise/services/auth_services.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -44,7 +45,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       TextSpan(
                         text:
                             username != null
-                                ? '${username[0].toUpperCase()}${username.substring(1)}!'
+                                ? (username.isNotEmpty
+                                    ? '${username[0].toUpperCase()}${username.substring(1)}!'
+                                    : 'User')
                                 : 'User',
                         style: const TextStyle(
                           fontSize: 24,
@@ -105,7 +108,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           iconData: SvgPicture.asset(
                             'assets/icons/disease_detection.svg',
                           ),
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.pushNamed(context, '/disease_detection');
+                          },
                         ),
                         _buildFeatureCard(
                           title: 'Pest Forecast',
@@ -126,7 +131,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           iconData: SvgPicture.asset(
                             'assets/icons/ferilizer_recipe.svg',
                           ),
-                          onTap: () {},
+                          onTap: () async {
+                            await AuthService().signout(context: context);
+                          },
                         ),
                       ],
                     ),
