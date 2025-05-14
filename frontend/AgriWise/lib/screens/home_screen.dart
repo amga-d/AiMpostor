@@ -105,28 +105,34 @@ class _HomeScreenState extends State<HomeScreen> {
                           iconData: SvgPicture.asset(
                             'assets/icons/disease_detection.svg',
                           ),
-                          onTap: () {},
+                          onTap: () {
+                              Navigator.pushNamed(context, '/diseaseDetection');
+                          },
                         ),
                         _buildFeatureCard(
                           title: 'Pest Forecast',
                           iconData: SvgPicture.asset(
                             'assets/icons/pest_forecast.svg',
                           ),
-                          onTap: () {},
+                          onTap: () {Navigator.pushNamed(context, '/diseaseDetection');},
                         ),
                         _buildFeatureCard(
                           title: 'Seeding Quality',
                           iconData: SvgPicture.asset(
                             'assets/icons/seeding_quality.svg',
                           ),
-                          onTap: () {},
+                          onTap: () {
+                              Navigator.pushNamed(context, '/seed_quality');
+                          },
                         ),
                         _buildFeatureCard(
                           title: 'Fertilizer Recipe',
                           iconData: SvgPicture.asset(
                             'assets/icons/ferilizer_recipe.svg',
                           ),
-                          onTap: () {},
+                          onTap: () {
+                              Navigator.pushNamed(context, '/fertilizer_recipe');
+                          },
                         ),
                       ],
                     ),

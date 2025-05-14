@@ -139,7 +139,6 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
             ),
             const SizedBox(height: 30),
 
-            // "or" with divider lines
             Row(
               children: [
                 Expanded(
@@ -158,7 +157,6 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
             ),
 
             const SizedBox(height: 15),
-            // Choose from album button
             SizedBox(
               width: 216,
               height: 41,

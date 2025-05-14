@@ -1,11 +1,10 @@
+import 'package:agriwise/screens/disease_detection/disease_detection_screen.dart';
 import 'package:agriwise/screens/home_screen.dart';
 import 'package:agriwise/screens/login_screen.dart';
 import 'package:agriwise/screens/register_screen.dart';
 import 'package:agriwise/screens/splash_screen.dart';
 import 'package:agriwise/screens/seeding_quality/seeding_quality_screen.dart';
-import 'package:agriwise/screens/seeding_quality/photo_preview_screen.dart';
-import 'package:agriwise/screens/seeding_quality/analyzing_screen.dart';
-import 'package:agriwise/screens/seeding_quality/result_screen.dart';
+import 'package:agriwise/screens/fertilizer_recipe/fertilizer_recipe_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -35,6 +34,8 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const HomeScreen(),
         '/splash': (context) => const SplashScreen(),
         '/seed_quality': (context) => const SeedingQualityScreen(),
+        '/diseaseDetection' :(context) => const DiseaseDetectionScreen(),
+        '/fertilizer_recipe' :(context) => const FertilizerRecipeScreen()
       },
     );
   }
@@ -102,9 +103,9 @@ class AuthWrapper extends StatelessWidget {
         } else if (snapshot.hasError) {
           return const Center(child: Text('Something went wrong'));
         } else if (snapshot.hasData) {
-          return const SeedingQualityScreen();
+          return const HomeScreen();
         } else {
-          return SeedingQualityScreen();
+          return SplashScreen();
         }
       },
     );
