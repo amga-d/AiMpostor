@@ -34,7 +34,6 @@ const assessQuality = async (req, res) => {
       return res.status(500).json({ error: savedResult.message });
     }
     // development only
-    console.log(response); //
     res.send(response); //
   } catch (error) {
     console.error("Error in seed quality assessment:", error);

@@ -5,7 +5,7 @@ const qualitySchema = {
     qualityAssessment: {
       type: "string",
       description:
-        "The quality assessment of the seed (e.g., High Quality, Medium Quality, Low Quality).",
+        "The quality assessment of the seed (High Quality, Medium Quality, Low Quality).",
     },
     recommendation: {
       type: "string",
