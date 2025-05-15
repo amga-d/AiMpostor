@@ -87,7 +87,7 @@ const listChats = async (userId) => {
 
     // get all chats
     const chatsRef = userRef.collection("chats");
-    const chatSnap = await chatsRef.get();
+    const chatSnap = await chatsRef.orderBy("createdAt", "asc").get();;
     if (chatSnap.empty) {
       return { success: false, message: "No chats found" };
     }
