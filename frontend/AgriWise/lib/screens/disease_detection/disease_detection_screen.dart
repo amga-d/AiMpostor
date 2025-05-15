@@ -1,8 +1,10 @@
+import 'package:agriwise/screens/disease_detection/chatbot_screen.dart';
+import 'package:agriwise/services/http_service.dart';
+import 'package:agriwise/widgets/disease_history_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:agriwise/screens/disease_detection/photo_preview_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'dart:io';
 
 import 'package:agriwise/screens/home_screen.dart';
 import 'package:agriwise/screens/profile_screen.dart';
@@ -15,11 +17,45 @@ class DiseaseDetectionScreen extends StatefulWidget {
 }
 
 class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
-
   int _selectedIndex = 0; // 0 for Home since this is not Profile
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final ImagePicker _picker = ImagePicker();
+  final List<dynamic> _history = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchHistory();
+  }
+
+  Future<void> _fetchHistory() async {
+    try {
+      final history = await HttpService().getChatHistory();
+      setState(() {
+        _history.addAll(history);
+      });
+    } catch (e) {
+      // Handle error
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error fetching history: $e')));
+    } finally {
+      if (_history.isNotEmpty) {
+        for (var chat in _history) {
+          final createdAt = chat['createdAt'];
+          if (createdAt != null && createdAt['_seconds'] != null) {
+            final date = DateTime.fromMillisecondsSinceEpoch(
+              createdAt['_seconds'] * 1000,
+            );
+            final formattedDate =
+                '${date.day} - ${date.month.toString().padLeft(2, '0')}';
+            chat['formattedDate'] = formattedDate;
+          }
+        }
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +77,10 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const HomeScreen()),
+            );
           },
         ),
         actions: [
@@ -53,7 +92,17 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
           ),
         ],
       ),
-      endDrawer: _buildHistoryDrawer(),
+      endDrawer: DiseaseHistoryDrawer(
+        history: _history,
+        onHistoryItemTap: (chatId) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ChatbotScreen(chatId: chatId),
+            ),
+          );
+        },
+      ),
       body: _buildInitialScreen(),
       bottomNavigationBar: _buildBottomNavBar(),
     );

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:agriwise/screens/disease_detection/analyzing_screen.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:io';
 
 import 'package:agriwise/screens/home_screen.dart';
@@ -10,7 +9,8 @@ import 'package:agriwise/screens/profile_screen.dart';
 class PhotoPreviewScreen extends StatefulWidget {
   final XFile imageFile;
 
-  const PhotoPreviewScreen({Key? key, required this.imageFile}) : super(key: key);
+  const PhotoPreviewScreen({Key? key, required this.imageFile})
+    : super(key: key);
 
   @override
   State<PhotoPreviewScreen> createState() => _PhotoPreviewScreenState();
@@ -40,18 +40,6 @@ class _PhotoPreviewScreenState extends State<PhotoPreviewScreen> {
             Navigator.pop(context);
           },
         ),
-        actions: [
-          Builder(
-            builder:
-                (context) => IconButton(
-                  icon: const Icon(Icons.history, color: Colors.black),
-                  onPressed: () {
-                    // Show history drawer
-                    Scaffold.of(context).openEndDrawer();
-                  },
-                ),
-          ),
-        ],
       ),
       body: Align(
         alignment: Alignment.topCenter,
@@ -159,7 +147,6 @@ class _PhotoPreviewScreenState extends State<PhotoPreviewScreen> {
           ),
         ),
       ),
-      endDrawer: _buildHistoryDrawer(context),
     );
   }
 
@@ -169,111 +156,6 @@ class _PhotoPreviewScreenState extends State<PhotoPreviewScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => AnalyzingScreen(imageFile: imageFile),
-      ),
-    );
-  }
-
-  // Bottom navigation bar
-  Widget _buildBottomNavBar() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            spreadRadius: 2,
-            blurRadius: 8,
-            offset: const Offset(0, -1),
-          ),
-        ],
-        border: Border(top: BorderSide(color: Colors.grey.shade300, width: 1)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 15),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            _buildNavItem(Icons.home, 'Home', true),
-            _buildNavItem(Icons.person, 'Profile', false),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNavItem(IconData icon, String label, bool isSelected) {
-    final color = isSelected ? const Color(0xFF3C8D40) : Colors.grey;
-
-    return GestureDetector(
-      onTap: () {
-        if (label == 'Home') {
-          if (_selectedIndex != 0) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const HomeScreen()),
-            );
-          }
-        } else if (label == 'Profile') {
-          if (_selectedIndex != 1) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const ProfileScreen()),
-            );
-          }
-        }
-      },
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, color: color),
-          const SizedBox(height: 4),
-          Text(label, style: TextStyle(color: color, fontSize: 12)),
-        ],
-      ),
-    );
-  }
-
-
-  // History drawer - now properly inside the class and with context parameter
-  Widget _buildHistoryDrawer(BuildContext context) {
-    return Drawer(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.fromLTRB(20, 50, 20, 20),
-            child: const Row(
-              children: [
-                Icon(Icons.history, size: 24),
-                SizedBox(width: 10),
-                Text(
-                  'History',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-          ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Text(
-              'Recent',
-              style: TextStyle(color: Colors.grey, fontSize: 14),
-            ),
-          ),
-          const SizedBox(height: 10),
-
-          // Static data for now
-          ListTile(
-            title: const Text(
-              'How serious is B...',
-              style: TextStyle(color: Colors.black, fontSize: 16),
-            ),
-            onTap: () {
-              Navigator.pop(context);
-              // Navigate to chatbot with the chat ID
-            },
-          ),
-        ],
       ),
     );
   }

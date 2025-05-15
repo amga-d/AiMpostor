@@ -1,13 +1,10 @@
-import 'package:agriwise/helpers/download_webp_as_file.dart';
 import 'package:flutter/material.dart';
 
-import 'dart:io';
+class DiseaseHistoryDrawer extends StatelessWidget {
+  final List<dynamic> history;
+  final Function(String) onHistoryItemTap;
 
-class HistoryDrawer extends StatelessWidget {
-  final Map<String, dynamic> history;
-  final Function(File, Map<String, dynamic>) onHistoryItemTap;
-
-  const HistoryDrawer({
+  const DiseaseHistoryDrawer({
     Key? key,
     required this.history,
     required this.onHistoryItemTap,
@@ -42,10 +39,9 @@ class HistoryDrawer extends StatelessWidget {
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.only(top: 10),
-              itemCount: history['assessments']?.length ?? 0,
+              itemCount: history.length ?? 0,
               itemBuilder: (context, index) {
-                if (history['assessments'] == null ||
-                    history['assessments'].isEmpty) {
+                if (history.isEmpty) {
                   return const Center(
                     child: Padding(
                       padding: EdgeInsets.only(top: 20),
@@ -56,22 +52,16 @@ class HistoryDrawer extends StatelessWidget {
                     ),
                   );
                 }
-                final reversedIndex =
-                    (history['assessments'].length - 1) - index;
-                final assessment = history['assessments'][reversedIndex];
-                final title =
-                    assessment['formattedDate'] != null
-                        ? 'Seed Quality check - ${assessment['formattedDate']}'
-                        : 'Seed Quality check';
+                final reversedIndex = (history.length - 1) - index;
+                final chat = history[reversedIndex];
+                final title = '${chat['title']} ${chat['formattedDate']}';
                 return ListTile(
                   title: Text(
                     title,
                     style: const TextStyle(color: Colors.black, fontSize: 16),
                   ),
                   onTap: () {
-                    downloadWebpAsFile(assessment['seedImageUrl']).then((file) {
-                      onHistoryItemTap(file, assessment);
-                    });
+                    onHistoryItemTap(chat['id']);
                   },
                 );
               },
@@ -81,6 +71,4 @@ class HistoryDrawer extends StatelessWidget {
       ),
     );
   }
-
-  // Helper method to download image
 }

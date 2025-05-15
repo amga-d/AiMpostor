@@ -7,9 +7,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:async';
 
-import 'package:agriwise/screens/home_screen.dart';
-import 'package:agriwise/screens/profile_screen.dart';
-
 class AnalyzingScreen extends StatefulWidget {
   final XFile imageFile;
 
@@ -20,7 +17,6 @@ class AnalyzingScreen extends StatefulWidget {
 }
 
 class _AnalyzingScreenState extends State<AnalyzingScreen> {
-
   int _selectedIndex = 0; // 0 for Home since this is not Profile
 
   int _dotCount = 1;
@@ -38,39 +34,35 @@ class _AnalyzingScreenState extends State<AnalyzingScreen> {
     });
 
     // Simulate analysis delay
-    Timer(const Duration(seconds: 3), () {
-      _timer?.cancel();
 
-      // In a real app, you would poll the API for analysis results
-      HttpService()
-          .predictDisease(widget.imageFile)
-          .then((results) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder:
-                    (context) => ResultScreen(
-                      imageFile: widget.imageFile,
-                      results: results,
-                    ),
-              ),
-            );
-          })
-          .catchError((error) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text('Error: $error')));
-            Navigator.pop(context);
-          });
-
-      // For now, just navigate to result screen
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) => ResultScreen(imageFile: widget.imageFile),
-      //   ),
-      // );
-    });
+    // In a real app, you would poll the API for analysis results
+    HttpService()
+        .predictDisease(widget.imageFile)
+        .then((results) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder:
+                  (context) => ResultScreen(
+                    imageFile: File(widget.imageFile.path),
+                    results: results,
+                  ),
+            ),
+          );
+        })
+        .catchError((error) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Error: $error')));
+          Navigator.pop(context);
+        });
+    // For now, just navigate to result screen
+    // Navigator.pushReplacement(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (context) => ResultScreen(imageFile: widget.imageFile),
+    //   ),
+    // );
   }
 
   @override
@@ -97,12 +89,6 @@ class _AnalyzingScreenState extends State<AnalyzingScreen> {
             Navigator.pop(context);
           },
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.history, color: Colors.black),
-            onPressed: () {},
-          ),
-        ],
       ),
       body: Center(
         child: Column(

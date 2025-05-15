@@ -24,7 +24,6 @@ class HttpService {
       body: jsonEncode({'name': name}),
     );
     final result = jsonDecode(response.body);
-    print("Backend response: ${result['message']}");
     if (response.statusCode != 200 && response.statusCode != 201) {
       throw Exception('Failed to sign up user');
     }
@@ -58,37 +57,6 @@ class HttpService {
     } else {
       final error = jsonDecode(response.body)['error'] ?? 'Unknown error';
       throw Exception('Failed to predict disease: $error');
-    }
-  }
-
-  Future<List<Map<String, dynamic>>> getChatHistory(String chatId) async {
-    String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
-    if (token == null) {
-      throw Exception('User is not authenticated');
-    }
-
-    final endpoint = "api/v1/chats/$chatId";
-
-    final response = await http.get(
-      Uri.parse('$baseUrl$endpoint'),
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-      },
-    );
-
-    if (response.statusCode == 200) {
-      final responseBody = jsonDecode(response.body);
-      if (responseBody['success'] == true) {
-        return List<Map<String, dynamic>>.from(responseBody['data']);
-      } else {
-        throw Exception(
-          'Failed to fetch chat history: ${responseBody['message']}',
-        );
-      }
-    } else {
-      final error = jsonDecode(response.body)['error'] ?? 'Unknown error';
-      throw Exception('Failed to fetch chat history: $error');
     }
   }
 
@@ -201,7 +169,12 @@ class HttpService {
       final responseBody = jsonDecode(response.body);
       if (responseBody['response'] != null &&
           responseBody['response']['message'] == 'success') {
-        return responseBody['response']['data'];
+        final data = responseBody['response']['data'];
+        if (data is Map<String, dynamic>) {
+          return data;
+        } else {
+          throw Exception('Unexpected data format: ${data.runtimeType}');
+        }
       } else {
         throw Exception(
           responseBody['response']?['error'] ?? 'Unknown error occurred',
@@ -214,6 +187,102 @@ class HttpService {
       throw Exception(
         'Failed to generate fertilizer recipe: Internal server error',
       );
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getMessagesHistory(String chatId) async {
+    String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
+    if (token == null) {
+      throw Exception('User is not authenticated');
+    }
+
+    final endpoint = "api/v1/chats/$chatId";
+
+    final response = await http.get(
+      Uri.parse('$baseUrl$endpoint'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final responseBody = jsonDecode(response.body);
+      if (responseBody['success'] == true) {
+        return List<Map<String, dynamic>>.from(responseBody['data']);
+      } else {
+        throw Exception(
+          'Failed to fetch chat history: ${responseBody['message']}',
+        );
+      }
+    } else {
+      final error = jsonDecode(response.body)['error'] ?? 'Unknown error';
+      throw Exception('Failed to fetch chat history: $error');
+    }
+  }
+
+  Future<String> sendMessage(String chatId, String message) async {
+    String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
+    if (token == null) {
+      throw Exception('User is not authenticated');
+    }
+    final endpoint = "api/v1/chats/chat";
+
+    final response = await http.post(
+      Uri.parse('$baseUrl$endpoint'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({'message': message, 'chatId': chatId}),
+    );
+
+    if (response.statusCode == 200) {
+      final responseBody = jsonDecode(response.body);
+      if (responseBody['response'] != null) {
+        return responseBody['response'];
+      } else {
+        throw Exception(
+          responseBody['response']?['error'] ?? 'Unknown error occurred',
+        );
+      }
+    } else if (response.statusCode == 400) {
+      final error = jsonDecode(response.body)['error'] ?? 'Invalid input';
+      throw Exception('Failed to send message: $error');
+    } else if (response.statusCode == 404) {
+      final error =
+          jsonDecode(response.body)['error'] ??
+          'Conversation ID not found or no previous messages.';
+      throw Exception('Failed to send message: $error');
+    } else {
+      throw Exception('Failed to send message: Internal server error');
+    }
+  }
+
+  Future<List<dynamic>> getChatHistory() async {
+    String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
+    if (token == null) {
+      throw Exception('User is not authenticated');
+    }
+    final endpoint = "api/v1/chats/";
+    final response = await http.get(
+      Uri.parse('$baseUrl$endpoint'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final responseBody = jsonDecode(response.body);
+
+      final data = responseBody['data'];
+      return data;
+    } else if (response.statusCode == 404) {
+      final responseBody = jsonDecode(response.body);
+      return responseBody['data'] ?? [];
+    } else {
+      throw Exception('Failed to retrieve chat: Internal server error');
     }
   }
 }

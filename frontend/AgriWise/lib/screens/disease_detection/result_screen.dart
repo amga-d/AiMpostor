@@ -1,15 +1,15 @@
+import 'package:agriwise/services/http_service.dart';
+import 'package:agriwise/widgets/disease_history_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:agriwise/screens/disease_detection/chatbot_screen.dart';
-import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
 import 'package:agriwise/screens/home_screen.dart';
 import 'package:agriwise/screens/profile_screen.dart';
 
 class ResultScreen extends StatefulWidget {
-  final XFile imageFile;
+  final File imageFile;
   final Map<String, dynamic> results;
-
   const ResultScreen({required this.imageFile, required this.results})
     : super();
 
@@ -19,6 +19,42 @@ class ResultScreen extends StatefulWidget {
 
 class _ResultScreenState extends State<ResultScreen> {
   int _selectedIndex = 0; // 0 for Home since this is not Profile
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final List<dynamic> _history = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchHistory();
+  }
+
+  Future<void> _fetchHistory() async {
+    try {
+      final history = await HttpService().getChatHistory();
+      setState(() {
+        _history.addAll(history);
+      });
+    } catch (e) {
+      // Handle error
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error fetching history: $e')));
+    } finally {
+      if (_history.isNotEmpty) {
+        for (var chat in _history) {
+          final createdAt = chat['createdAt'];
+          if (createdAt != null && createdAt['_seconds'] != null) {
+            final date = DateTime.fromMillisecondsSinceEpoch(
+              createdAt['_seconds'] * 1000,
+            );
+            final formattedDate =
+                '${date.day} - ${date.month.toString().padLeft(2, '0')}';
+            chat['formattedDate'] = formattedDate;
+          }
+        }
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +67,7 @@ class _ResultScreenState extends State<ResultScreen> {
     final recommendedActions = response['recommendedAction'] ?? [];
     final chatId = widget.results['chatId'] ?? 'Unknown';
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: const Color(0xFFF7F7F7),
@@ -47,13 +84,19 @@ class _ResultScreenState extends State<ResultScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/disease_detection',
+              (Route<dynamic> route) => false,
+            );
           },
         ),
         actions: [
           IconButton(
             icon: const Icon(Icons.history, color: Colors.black),
-            onPressed: () {},
+            onPressed: () {
+              _scaffoldKey.currentState?.openEndDrawer();
+            },
           ),
         ],
       ),
@@ -237,7 +280,10 @@ class _ResultScreenState extends State<ResultScreen> {
                               context,
                               MaterialPageRoute(
                                 builder:
-                                    (context) => ChatbotScreen(chatId: chatId),
+                                    (context) => ChatbotScreen(
+                                      chatId: chatId,
+                                      imageFile: widget.imageFile,
+                                    ),
                               ),
                             );
                           },
@@ -265,6 +311,17 @@ class _ResultScreenState extends State<ResultScreen> {
             ),
           ),
         ),
+      ),
+      endDrawer: DiseaseHistoryDrawer(
+        history: _history,
+        onHistoryItemTap: (chatId) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ChatbotScreen(chatId: chatId),
+            ),
+          );
+        },
       ),
       bottomNavigationBar: _buildBottomNavBar(),
     );
