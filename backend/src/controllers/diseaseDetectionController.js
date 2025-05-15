@@ -51,8 +51,7 @@ export const predictDisease = async (req, res) => {
         publicUrl: req.file.publicUrl,
       },
     ];
-
-    const result = await addMsgToNewChat(req.user.uid, messages);
+    const result = await addMsgToNewChat(req.user.uid, messages , response.detectedDisease);
     if (!result.success) {
       throw new Error(result.message);
     }
@@ -121,7 +120,6 @@ export const chatWithModel = async (req, res) => {
     //   parts: [{ text: responseText }],
     // });
 
-    // console.log(JSON.stringify(chatHistory, null, 4));
     res.json({ response: responseText });
   } catch (error) {
     console.error("Chat error:", error);

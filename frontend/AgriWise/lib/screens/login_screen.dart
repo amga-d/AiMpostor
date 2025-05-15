@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:agriwise/services/auth_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -254,7 +252,6 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _socialLoginButton({
     required VoidCallback onPressed,
     required SvgPicture icon,
-    bool appleIcon = false,
     // required Color color,
   }) {
     return InkWell(

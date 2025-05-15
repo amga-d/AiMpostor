@@ -1,18 +1,21 @@
+import 'package:agriwise/services/auth_services.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:agriwise/screens/home_screen.dart'; // Import HomeScreen
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({super.key});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  int _selectedIndex = 1; // 1 for Profile since this is the Profile screen
+  final int _selectedIndex = 1; // 1 for Profile since this is the Profile screen
 
   // Sample user data - just name
-  final String _userName = 'John Doe';
+  final String _userName =
+      FirebaseAuth.instance.currentUser?.displayName ?? 'User';
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +42,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               radius: 50,
               backgroundColor: const Color(0xFF3C8D40),
               child: Text(
-                _userName.substring(0, 1),
+                _userName.substring(0, 1).toUpperCase(),
                 style: const TextStyle(
                   fontSize: 40,
                   fontWeight: FontWeight.bold,
@@ -77,10 +80,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 child: const Text(
                   'Logout',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                 ),
               ),
             ),
@@ -94,33 +94,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void _showLogoutDialog() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Logout'),
-        content: const Text('Are you sure you want to logout?'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              // In a real app, perform logout logic here
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('You have been logged out'),
+      builder:
+          (context) => AlertDialog(
+            title: const Text('Logout'),
+            content: const Text('Are you sure you want to logout?'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  // In a real app, perform logout logic here
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('You have been logged out')),
+                  );
+                  AuthService().signout(context: context);
+                },
+                child: const Text(
+                  'Logout',
+                  style: TextStyle(color: Colors.red),
                 ),
-              );
-            },
-            child: const Text(
-              'Logout',
-              style: TextStyle(color: Colors.red),
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 
@@ -136,9 +135,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             offset: const Offset(0, -1),
           ),
         ],
-        border: Border(
-          top: BorderSide(color: Colors.grey.shade300, width: 1),
-        ),
+        border: Border(top: BorderSide(color: Colors.grey.shade300, width: 1)),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 15),
@@ -159,14 +156,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return GestureDetector(
       onTap: () {
         if (label == 'Home') {
-          if (_selectedIndex != 0) { // Only navigate if not already on Home
+          if (_selectedIndex != 0) {
+            // Only navigate if not already on Home
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const HomeScreen()),
             );
           }
         } else if (label == 'Profile') {
-          if (_selectedIndex != 1) { // Only navigate if not already on Profile
+          if (_selectedIndex != 1) {
+            // Only navigate if not already on Profile
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const ProfileScreen()),
@@ -179,10 +178,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         children: [
           Icon(icon, color: color),
           const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(color: color, fontSize: 12),
-          ),
+          Text(label, style: TextStyle(color: color, fontSize: 12)),
         ],
       ),
     );

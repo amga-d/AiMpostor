@@ -1,40 +1,73 @@
-import 'dart:convert';
+import 'dart:io';
+
+import 'package:agriwise/helpers/download_webp_as_file.dart';
+import 'package:agriwise/services/http_service.dart';
+import 'package:agriwise/widgets/disease_history_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:agriwise/models/chat_message.dart';
 import 'package:agriwise/screens/disease_detection/result_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:agriwise/services/chat_service.dart';
-
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:agriwise/screens/home_screen.dart';
 import 'package:agriwise/screens/profile_screen.dart';
 
 class ChatbotScreen extends StatefulWidget {
   final String chatId;
-  final dynamic imageFile;
+  final File? imageFile;
 
-  const ChatbotScreen({required this.chatId, this.imageFile}) : super();
+  const ChatbotScreen({super.key, required this.chatId, this.imageFile});
 
   @override
   State<ChatbotScreen> createState() => _ChatbotScreenState();
 }
 
 class _ChatbotScreenState extends State<ChatbotScreen> {
-
-  int _selectedIndex = 0; // 0 for Home since this is not Profile
+  final int _selectedIndex = 0; // 0 for Home since this is not Profile
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final List<dynamic> _history = [];
 
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   final ChatService _chatService = ChatService();
   bool _isLoading = true;
-  Map<String, dynamic>? _diseaseData;
-
+  Map<String, dynamic> _diseaseData = {};
   // Messages list
   List<ChatMessage> _messages = [];
-
+  File _imageFile = File('');
   @override
   void initState() {
     super.initState();
     _loadChatHistory();
+    _fetchHistory();
+  }
+
+  Future<void> _fetchHistory() async {
+    try {
+      final history = await HttpService().getChatHistory();
+      setState(() {
+        _history.addAll(history);
+      });
+    } catch (e) {
+      // Handle error
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error fetching history: $e')));
+    } finally {
+      if (_history.isNotEmpty) {
+        for (var chat in _history) {
+          final createdAt = chat['createdAt'];
+          if (createdAt != null && createdAt['_seconds'] != null) {
+            final date = DateTime.fromMillisecondsSinceEpoch(
+              createdAt['_seconds'] * 1000,
+            );
+            final formattedDate =
+                '${date.day} - ${date.month.toString().padLeft(2, '0')}';
+            chat['formattedDate'] = formattedDate;
+          }
+        }
+      }
+    }
   }
 
   Future<void> _loadChatHistory() async {
@@ -43,28 +76,13 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
     });
 
     try {
-      final messages = await _chatService.getChatHistory(widget.chatId);
-
-      // Extract disease info from the response if available
-      for (var i = 0; i < messages.length; i++) {
-        var message = messages[i];
-        if (!message.isUser) {
-          try {
-            final data = jsonDecode(message.text);
-            if (data is Map && data.containsKey('detectedDisease')) {
-              _diseaseData = data.cast<String, dynamic>();
-              // Remove this message from the chat display
-              messages.removeAt(i);
-              break;
-            }
-          } catch (e) {
-            // Not JSON content, continue
-          }
-        }
-      }
+      final messagesHistory = await _chatService.getMessagesHistory(
+        widget.chatId,
+      );
 
       setState(() {
-        _messages = messages;
+        _messages = messagesHistory['messages'] as List<ChatMessage>;
+        _diseaseData = messagesHistory['reportData'] as Map<String, dynamic>;
         _isLoading = false;
       });
 
@@ -99,11 +117,29 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
   }
 
   Widget _buildDiseaseInfoCard() {
-    final String diseaseName =
-        _diseaseData?['detectedDisease'] ?? 'Bacterial Leaf';
-    final String detectionDate =
-        '4 May 2025'; // You might want to extract this from somewhere
-
+    final String diseaseName;
+    final String detectionDate;
+    if (_diseaseData.isNotEmpty &&
+        _diseaseData['content'] != null) {
+      // Extract disease name and date from the report data
+      diseaseName =
+          _diseaseData['content']['detectedDisease'] ??
+          'Unknown Disease'; // Extract disease name if available
+      detectionDate =
+          _diseaseData['detectionDate'].toString() ??
+          'Unknown Date'; // Extract date if available
+    } else {
+      diseaseName = 'Unknown Disease';
+      detectionDate = 'Unknown Date';
+    }
+    print(_diseaseData);
+    if (widget.imageFile == null) {
+      downloadWebpAsFile(_diseaseData['publicUrl']).then((file) {
+        _imageFile = file;
+      });
+    } else {
+      _imageFile = widget.imageFile!;
+    }
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -155,7 +191,9 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                             ),
                           ),
                           Text(
-                            diseaseName,
+                            diseaseName.length > 10
+                                ? '${diseaseName.substring(0, 10)}...'
+                                : diseaseName,
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
@@ -206,12 +244,10 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                     builder:
                         (context) => ResultScreen(
                           results: Map<String, dynamic>.from({
-                            'disease': diseaseName,
-                            'severity': 'Moderate',
-                            'recommendations':
-                                'Apply recommended bactericides and monitor daily.',
+                            'response': _diseaseData['content'],
+                            'chatId': widget.chatId,
                           }),
-                          imageFile: widget.imageFile,
+                          imageFile: _imageFile,
                         ),
                   ),
                 );
@@ -241,6 +277,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: const Color(0xFFF7F7F7),
       appBar: AppBar(
         backgroundColor: const Color(0xFFF7F7F7),
@@ -257,13 +294,19 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/disease_detection',
+              (Route<dynamic> route) => false,
+            );
           },
         ),
         actions: [
           IconButton(
             icon: const Icon(Icons.history, color: Colors.black),
-            onPressed: () {},
+            onPressed: () {
+              _scaffoldKey.currentState?.openEndDrawer();
+            },
           ),
         ],
       ),
@@ -367,16 +410,26 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                   ),
         ),
       ),
+      endDrawer: DiseaseHistoryDrawer(
+        history: _history,
+        onHistoryItemTap: (chatId) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ChatbotScreen(chatId: chatId),
+            ),
+          );
+        },
+      ),
       bottomNavigationBar: _buildBottomNavBar(),
     );
   }
 
-  void _sendMessage() {
+  void _sendMessage() async {
     if (_messageController.text.trim().isEmpty) return;
 
     final messageText = _messageController.text.trim();
     _messageController.clear();
-
     final userMessage = ChatMessage(
       text: messageText,
       isUser: true,
@@ -388,29 +441,26 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
       _messages.add(userMessage);
     });
 
-    // Scroll to bottom
-    Future.delayed(const Duration(milliseconds: 100), _scrollToBottom);
-
     // Here you would send the message to your API
     // and handle the response
-    // For now, we'll simulate a response
-
-    // For testing, simulate AI response after a delay
-    Future.delayed(const Duration(seconds: 1), () {
-      setState(() {
+    try {
+      // Simulate sending message to the server
+      final response = await _chatService.sendMessage(
+        widget.chatId,
+        messageText,
+      );
+      final modleMessage = setState(() {
         _messages.add(
-          ChatMessage(
-            text:
-                "Thank you for your question. I'll provide more detailed guidance on managing ${_diseaseData?['detectedDisease'] ?? 'Bacterial Leaf Blight'}. Make sure to follow the recommended actions to control the disease.",
-            isUser: false,
-            timestamp: DateTime.now(),
-          ),
+          ChatMessage(text: response, isUser: false, timestamp: DateTime.now()),
         );
       });
+    } catch (e) {
+      // Handle error if needed
+      print('Error sending message: $e');
+    }
 
-      // Scroll to bottom after response
-      Future.delayed(const Duration(milliseconds: 100), _scrollToBottom);
-    });
+    // Scroll to bottom after response
+    Future.delayed(const Duration(milliseconds: 100), _scrollToBottom);
   }
 
   Widget _buildMessage(ChatMessage message) {
@@ -428,7 +478,20 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
           border:
               message.isUser ? Border.all(color: Colors.grey.shade300) : null,
         ),
-        child: Text(message.text, style: const TextStyle(fontSize: 14)),
+        child:
+            message.isUser
+                ? Text(message.text, style: const TextStyle(fontSize: 14))
+                : MarkdownBody(
+                  data: message.text,
+                  styleSheet: MarkdownStyleSheet(
+                    p: const TextStyle(fontSize: 14),
+                    strong: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    em: TextStyle(fontSize: 14, fontStyle: FontStyle.italic),
+                  ),
+                ),
       ),
     );
   }

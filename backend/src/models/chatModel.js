@@ -4,14 +4,13 @@ import { FieldValue } from "firebase-admin/firestore";
 const MAX_CHAT_HISTORY = 10; // max chat history to keep
 const usersRef = db.collection("users");
 
-const createNewChat = async (userRef) => {
+const createNewChat = async (userRef,title) => {
   try {
     const chatRef = userRef.collection("chats").doc();
     await chatRef.set({
       createdAt: FieldValue.serverTimestamp(),
-      title: "first chat",
+      title: title,
     });
-    console.log("Chat created with ID:", chatRef.id);
     return { success: true, chatRef: chatRef };
   } catch (error) {
     console.error("Error New creating chat:", error);
@@ -27,7 +26,7 @@ const saveMsg = async (chatRef, messages) => {
         ...message,
         createdAt: FieldValue.serverTimestamp(),
       });
-      console.log("Message added with ID:", messageRef.id);
+      ("Message added with ID:", messageRef.id);
     }
     return { success: true };
   } catch (error) {
@@ -57,14 +56,14 @@ const addMsgToChat = async (userId, chatId, messages) => {
   }
 };
 
-const addMsgToNewChat = async (userId, messages) => {
+const addMsgToNewChat = async (userId, messages, title) => {
   try {
     // check if userId exists
     const userRef = usersRef.doc(userId);
     await checkDocExists(userRef, "User does not exist");
 
     // create new chat
-    const newChatResult = await createNewChat(userRef);
+    const newChatResult = await createNewChat(userRef ,title);
     if (!newChatResult.success) {
       throw new Error(newChatResult.message);
     }
@@ -88,7 +87,7 @@ const listChats = async (userId) => {
 
     // get all chats
     const chatsRef = userRef.collection("chats");
-    const chatSnap = await chatsRef.get();
+    const chatSnap = await chatsRef.orderBy("createdAt", "asc").get();;
     if (chatSnap.empty) {
       return { success: false, message: "No chats found" };
     }
@@ -116,7 +115,6 @@ const getChat = async (userId, chatId) => {
     const messagesRef = chatRef.collection("messages");
     const messagesSnap = await messagesRef.orderBy("createdAt", "desc").get();
     if (messagesSnap.empty) {
-      console.log("No messages found");
       return { success: false, message: "No messages found" };
     }
 
@@ -148,12 +146,10 @@ const cloneChatHistory = async (userId, chatId) => {
       .limit(MAX_CHAT_HISTORY)
       .get();
     if (messagesSnap.empty) {
-      console.log("No messages found");
       return { success: false, message: "No messages found" };
     }
 
     if (messagesSnap.empty) {
-      console.log("No messages found");
       return { success: false, message: "No messages found" };
     }
     const messages = [];

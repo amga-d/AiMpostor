@@ -1,27 +1,68 @@
+import 'package:agriwise/services/http_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:agriwise/screens/home_screen.dart';
 import 'package:agriwise/screens/profile_screen.dart';
 
 class FertilizerRecipeScreen extends StatefulWidget {
-  const FertilizerRecipeScreen({Key? key}) : super(key: key);
+  const FertilizerRecipeScreen({super.key});
 
   @override
   State<FertilizerRecipeScreen> createState() => _FertilizerRecipeScreenState();
 }
 
 class _FertilizerRecipeScreenState extends State<FertilizerRecipeScreen> {
-  int _selectedIndex = 0; // 0 for Home since this is not Profile
+  final int _selectedIndex = 0; // 0 for Home since this is not Profile
   final TextEditingController _materialsController = TextEditingController();
   final TextEditingController _plantsController = TextEditingController();
   bool _showRecipe = false;
   String _plantType = '';
+  Map<String, dynamic>? _recipeData;
+  bool _isLoading = false;
 
   @override
   void dispose() {
     _materialsController.dispose();
     _plantsController.dispose();
     super.dispose();
+  }
+
+  Future<void> _getRecipe() async {
+    final plantInput = _plantsController.text.trim();
+    final materialsInput = _materialsController.text.trim();
+
+    if (plantInput.isEmpty || materialsInput.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill in all fields')),
+      );
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+      _showRecipe = false;
+    });
+
+    try {
+      final response = await HttpService().getFertilizerRecipe(
+        plantInput,
+        materialsInput,
+      );
+
+      setState(() {
+        _plantType = response['plant'] ?? plantInput;
+        _recipeData = response;
+        _showRecipe = true;
+      });
+        } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error: ${e.toString()}')));
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -78,38 +119,38 @@ class _FertilizerRecipeScreenState extends State<FertilizerRecipeScreen> {
                     ),
                     const SizedBox(height: 12),
                     Container(
-                      decoration: BoxDecoration(color: Colors.white),
+                      decoration: const BoxDecoration(color: Colors.white),
                       child: TextField(
                         controller: _materialsController,
                         decoration: InputDecoration(
                           hintText: 'manure, banana peel, ashes...',
-                          hintStyle: TextStyle(
+                          hintStyle: const TextStyle(
                             color: Colors.grey,
                             fontSize: 14,
                           ),
                           filled: true,
                           fillColor: Colors.white,
-                          contentPadding: EdgeInsets.symmetric(
+                          contentPadding: const EdgeInsets.symmetric(
                             horizontal: 15,
                             vertical: 15,
                           ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                               color: Color(0xffC9C9C9),
                               width: 1,
                             ),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                               color: Color(0xffC9C9C9),
                               width: 1,
                             ),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                               color: Color(0xffC9C9C9),
                               width: 1,
                             ),
@@ -130,7 +171,7 @@ class _FertilizerRecipeScreenState extends State<FertilizerRecipeScreen> {
                     ),
                     const SizedBox(height: 12),
                     Container(
-                      decoration: BoxDecoration(color: Colors.white),
+                      decoration: const BoxDecoration(color: Colors.white),
                       child: TextField(
                         controller: _plantsController,
                         decoration: InputDecoration(
@@ -147,21 +188,21 @@ class _FertilizerRecipeScreenState extends State<FertilizerRecipeScreen> {
                           ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                               color: Color(0xffC9C9C9),
                               width: 1,
                             ),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                               color: Color(0xffC9C9C9),
                               width: 1,
                             ),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                               color: Color(0xffC9C9C9),
                               width: 1,
                             ),
@@ -176,41 +217,32 @@ class _FertilizerRecipeScreenState extends State<FertilizerRecipeScreen> {
                         width: 180,
                         height: 45,
                         child: ElevatedButton(
-                          onPressed: () {
-                            final plantInput = _plantsController.text.trim();
-                            if (plantInput.isNotEmpty) {
-                              final plants = plantInput.split(',');
-                              setState(() {
-                                _plantType = plants[0].trim();
-                                _showRecipe = true;
-                              });
-
-                              Future.delayed(
-                                const Duration(milliseconds: 100),
-                                () {
-                                  Scrollable.ensureVisible(
-                                    context,
-                                    duration: const Duration(milliseconds: 300),
-                                    curve: Curves.easeInOut,
-                                  );
-                                },
-                              );
-                            }
-                          },
+                          onPressed: _isLoading ? null : _getRecipe,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF307C42),
                             foregroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
+                            disabledBackgroundColor: Colors.grey,
                           ),
-                          child: const Text(
-                            'Get Recipe',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
+                          child:
+                              _isLoading
+                                  ? const SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                      strokeWidth: 2,
+                                    ),
+                                  )
+                                  : const Text(
+                                    'Get Recipe',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
                         ),
                       ),
                     ),
@@ -218,7 +250,7 @@ class _FertilizerRecipeScreenState extends State<FertilizerRecipeScreen> {
                 ),
               ),
 
-              if (_showRecipe) ...[
+              if (_showRecipe && _recipeData != null) ...[
                 const SizedBox(height: 24),
                 Container(
                   decoration: BoxDecoration(
@@ -234,7 +266,7 @@ class _FertilizerRecipeScreenState extends State<FertilizerRecipeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Suggested Fertilizer Recipe for Your $_plantType Plant:',
+                        'Suggested Fertilizer Recipe for Your $_plantType Plant: ',
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -250,24 +282,25 @@ class _FertilizerRecipeScreenState extends State<FertilizerRecipeScreen> {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      _buildBulletPoint('2 parts banana peel'),
-                      _buildBulletPoint('1 part ashes'),
-                      _buildBulletPoint('1 part cow dung'),
+                      if (_recipeData!['recipe'] != null &&
+                          _recipeData!['recipe']['ingredients'] != null)
+                        ..._buildIngredientsList(
+                          _recipeData!['recipe']['ingredients'],
+                        ),
                       const SizedBox(height: 16),
                       const Text(
-                        'Mix all ingredients thoroughly until blended well.',
-                        style: TextStyle(fontSize: 14),
+                        'Instructions:',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                       const SizedBox(height: 8),
-                      const Text(
-                        'Apply the mix evenly around the base of your Whatever plant.',
-                        style: TextStyle(fontSize: 14),
-                      ),
-                      const SizedBox(height: 8),
-                      const Text(
-                        'Repeat this every 2 weeks for best results.',
-                        style: TextStyle(fontSize: 14),
-                      ),
+                      if (_recipeData!['recipe'] != null &&
+                          _recipeData!['recipe']['instructions'] != null)
+                        ..._buildInstructionsList(
+                          _recipeData!['recipe']['instructions'],
+                        ),
                     ],
                   ),
                 ),
@@ -278,6 +311,28 @@ class _FertilizerRecipeScreenState extends State<FertilizerRecipeScreen> {
       ),
       bottomNavigationBar: _buildBottomNavBar(),
     );
+  }
+
+  List<Widget> _buildIngredientsList(List<dynamic> ingredients) {
+    return ingredients.map<Widget>((ingredient) {
+      if (ingredient is Map<String, dynamic>) {
+        return _buildBulletPoint(
+          '${ingredient['quantity'] ?? ''} ${ingredient['material'] ?? ''}',
+        );
+      } else if (ingredient is String) {
+        return _buildBulletPoint(ingredient);
+      }
+      return Container();
+    }).toList();
+  }
+
+  List<Widget> _buildInstructionsList(List<dynamic> instructions) {
+    return instructions.map<Widget>((instruction) {
+      if (instruction is String) {
+        return _buildBulletPoint(instruction);
+      }
+      return Container();
+    }).toList();
   }
 
   Widget _buildBulletPoint(String text) {

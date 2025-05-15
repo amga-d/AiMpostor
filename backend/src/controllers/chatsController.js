@@ -42,7 +42,7 @@ const getAllChats = async (req, res) => {
         data: response.data,
       });
     } else {
-      return res.status(200).json({
+      return res.status(404).json({
         message: response.message,
         data: [],
       });
