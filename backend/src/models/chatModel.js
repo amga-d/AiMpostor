@@ -4,12 +4,12 @@ import { FieldValue } from "firebase-admin/firestore";
 const MAX_CHAT_HISTORY = 10; // max chat history to keep
 const usersRef = db.collection("users");
 
-const createNewChat = async (userRef) => {
+const createNewChat = async (userRef,title) => {
   try {
     const chatRef = userRef.collection("chats").doc();
     await chatRef.set({
       createdAt: FieldValue.serverTimestamp(),
-      title: "first chat",
+      title: title,
     });
     return { success: true, chatRef: chatRef };
   } catch (error) {
@@ -56,14 +56,14 @@ const addMsgToChat = async (userId, chatId, messages) => {
   }
 };
 
-const addMsgToNewChat = async (userId, messages) => {
+const addMsgToNewChat = async (userId, messages, title) => {
   try {
     // check if userId exists
     const userRef = usersRef.doc(userId);
     await checkDocExists(userRef, "User does not exist");
 
     // create new chat
-    const newChatResult = await createNewChat(userRef);
+    const newChatResult = await createNewChat(userRef ,title);
     if (!newChatResult.success) {
       throw new Error(newChatResult.message);
     }

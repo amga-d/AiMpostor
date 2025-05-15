@@ -51,8 +51,7 @@ export const predictDisease = async (req, res) => {
         publicUrl: req.file.publicUrl,
       },
     ];
-
-    const result = await addMsgToNewChat(req.user.uid, messages);
+    const result = await addMsgToNewChat(req.user.uid, messages , response.detectedDisease);
     if (!result.success) {
       throw new Error(result.message);
     }
