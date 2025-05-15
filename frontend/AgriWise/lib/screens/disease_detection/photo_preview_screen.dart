@@ -4,12 +4,20 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:io';
 
-class PhotoPreviewScreen extends StatelessWidget {
+import 'package:agriwise/screens/home_screen.dart';
+import 'package:agriwise/screens/profile_screen.dart';
+
+class PhotoPreviewScreen extends StatefulWidget {
   final XFile imageFile;
 
-  const PhotoPreviewScreen({Key? key, required this.imageFile})
-    : super(key: key);
+  const PhotoPreviewScreen({Key? key, required this.imageFile}) : super(key: key);
 
+  @override
+  State<PhotoPreviewScreen> createState() => _PhotoPreviewScreenState();
+}
+
+class _PhotoPreviewScreenState extends State<PhotoPreviewScreen> {
+  int _selectedIndex = 0; // 0 for Home since this is not Profile
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,7 +89,7 @@ class PhotoPreviewScreen extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(16),
                 child: Image.file(
-                  File(imageFile.path),
+                  File(widget.imageFile.path),
                   width: double.infinity,
                   height: 352,
                   fit: BoxFit.cover,
@@ -126,7 +134,7 @@ class PhotoPreviewScreen extends StatelessWidget {
                     height: 45,
                     child: ElevatedButton.icon(
                       onPressed: () {
-                        _analyzeImage(context, imageFile);
+                        _analyzeImage(context, widget.imageFile);
                       },
                       icon: const Icon(Icons.check, color: Colors.white),
                       label: const Text(
@@ -196,15 +204,35 @@ class PhotoPreviewScreen extends StatelessWidget {
   Widget _buildNavItem(IconData icon, String label, bool isSelected) {
     final color = isSelected ? const Color(0xFF3C8D40) : Colors.grey;
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, color: color),
-        const SizedBox(height: 4),
-        Text(label, style: TextStyle(color: color, fontSize: 12)),
-      ],
+    return GestureDetector(
+      onTap: () {
+        if (label == 'Home') {
+          if (_selectedIndex != 0) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const HomeScreen()),
+            );
+          }
+        } else if (label == 'Profile') {
+          if (_selectedIndex != 1) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const ProfileScreen()),
+            );
+          }
+        }
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: color),
+          const SizedBox(height: 4),
+          Text(label, style: TextStyle(color: color, fontSize: 12)),
+        ],
+      ),
     );
   }
+
 
   // History drawer - now properly inside the class and with context parameter
   Widget _buildHistoryDrawer(BuildContext context) {

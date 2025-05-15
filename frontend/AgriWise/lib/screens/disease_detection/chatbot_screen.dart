@@ -5,6 +5,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:io';
 
+import 'package:agriwise/screens/home_screen.dart';
+import 'package:agriwise/screens/profile_screen.dart';
+
 class ChatbotScreen extends StatefulWidget {
   final XFile imageFile;
 
@@ -15,6 +18,9 @@ class ChatbotScreen extends StatefulWidget {
 }
 
 class _ChatbotScreenState extends State<ChatbotScreen> {
+
+  int _selectedIndex = 0; // 0 for Home since this is not Profile
+
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
@@ -399,13 +405,32 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
   Widget _buildNavItem(IconData icon, String label, bool isSelected) {
     final color = isSelected ? const Color(0xFF3C8D40) : Colors.grey;
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, color: color),
-        const SizedBox(height: 4),
-        Text(label, style: TextStyle(color: color, fontSize: 12)),
-      ],
+    return GestureDetector(
+      onTap: () {
+        if (label == 'Home') {
+          if (_selectedIndex != 0) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const HomeScreen()),
+            );
+          }
+        } else if (label == 'Profile') {
+          if (_selectedIndex != 1) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const ProfileScreen()),
+            );
+          }
+        }
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: color),
+          const SizedBox(height: 4),
+          Text(label, style: TextStyle(color: color, fontSize: 12)),
+        ],
+      ),
     );
   }
 }

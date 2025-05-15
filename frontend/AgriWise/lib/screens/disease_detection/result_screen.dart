@@ -3,10 +3,20 @@ import 'package:agriwise/screens/disease_detection/chatbot_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
-class ResultScreen extends StatelessWidget {
+import 'package:agriwise/screens/home_screen.dart';
+import 'package:agriwise/screens/profile_screen.dart';
+
+class ResultScreen extends StatefulWidget {
   final XFile imageFile;
 
   const ResultScreen({Key? key, required this.imageFile}) : super(key: key);
+
+  @override
+  State<ResultScreen> createState() => _ResultScreenState();
+}
+
+class _ResultScreenState extends State<ResultScreen> {
+  int _selectedIndex = 0; // 0 for Home since this is not Profile
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +65,7 @@ class ResultScreen extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(16),
                   child: Image.file(
-                    File(imageFile.path),
+                    File(widget.imageFile.path),
                     width: double.infinity,
                     height: 250,
                     fit: BoxFit.cover,
@@ -309,7 +319,7 @@ class ResultScreen extends StatelessWidget {
                               MaterialPageRoute(
                                 builder:
                                     (context) =>
-                                        ChatbotScreen(imageFile: imageFile),
+                                        ChatbotScreen(imageFile: widget.imageFile),
                               ),
                             );
                           },
@@ -386,13 +396,32 @@ class ResultScreen extends StatelessWidget {
   Widget _buildNavItem(IconData icon, String label, bool isSelected) {
     final color = isSelected ? const Color(0xFF3C8D40) : Colors.grey;
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, color: color),
-        const SizedBox(height: 4),
-        Text(label, style: TextStyle(color: color, fontSize: 12)),
-      ],
+    return GestureDetector(
+      onTap: () {
+        if (label == 'Home') {
+          if (_selectedIndex != 0) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const HomeScreen()),
+            );
+          }
+        } else if (label == 'Profile') {
+          if (_selectedIndex != 1) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const ProfileScreen()),
+            );
+          }
+        }
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: color),
+          const SizedBox(height: 4),
+          Text(label, style: TextStyle(color: color, fontSize: 12)),
+        ],
+      ),
     );
   }
 }
