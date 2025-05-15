@@ -32,8 +32,6 @@ Use the 'predict_fertilizer_recipe' tool to provide a structured JSON response. 
         const result = await chat.sendMessage(prompt);
 
         const response = await result.response
-        console.log("Response from model:", response.text());
-        console.log("Function call data:", );
         const functionCall = response.functionCalls();
         if (functionCall && functionCall.length > 0) {
             const functionName = functionCall[0].name;
@@ -49,7 +47,6 @@ Use the 'predict_fertilizer_recipe' tool to provide a structured JSON response. 
                         console.error("Validation errors:", validate.errors);
                         throw new Error("JSON Schema validation failed");
                     }
-                    console.log(argumentsData);
                     return argumentsData;
                 } catch (error) {
                     console.error("Error validating response:", error);
@@ -59,7 +56,6 @@ Use the 'predict_fertilizer_recipe' tool to provide a structured JSON response. 
         }
     } catch (error) {
         if (error.status === 503);
-        console.log(error.status);
         console.error("Error generating fertilizer recipe:", error);
         return { error: "Invalid response format. Please try again." };
     }

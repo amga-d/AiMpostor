@@ -11,7 +11,6 @@ const createNewChat = async (userRef) => {
       createdAt: FieldValue.serverTimestamp(),
       title: "first chat",
     });
-    console.log("Chat created with ID:", chatRef.id);
     return { success: true, chatRef: chatRef };
   } catch (error) {
     console.error("Error New creating chat:", error);
@@ -27,7 +26,7 @@ const saveMsg = async (chatRef, messages) => {
         ...message,
         createdAt: FieldValue.serverTimestamp(),
       });
-      console.log("Message added with ID:", messageRef.id);
+      ("Message added with ID:", messageRef.id);
     }
     return { success: true };
   } catch (error) {
@@ -116,7 +115,6 @@ const getChat = async (userId, chatId) => {
     const messagesRef = chatRef.collection("messages");
     const messagesSnap = await messagesRef.orderBy("createdAt", "desc").get();
     if (messagesSnap.empty) {
-      console.log("No messages found");
       return { success: false, message: "No messages found" };
     }
 
@@ -148,12 +146,10 @@ const cloneChatHistory = async (userId, chatId) => {
       .limit(MAX_CHAT_HISTORY)
       .get();
     if (messagesSnap.empty) {
-      console.log("No messages found");
       return { success: false, message: "No messages found" };
     }
 
     if (messagesSnap.empty) {
-      console.log("No messages found");
       return { success: false, message: "No messages found" };
     }
     const messages = [];

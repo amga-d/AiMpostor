@@ -9,7 +9,6 @@ const saveImage = async (req, res, next) => {
   try {
     const timestamp = new Date().toISOString().replace(/[-:.TZ]/g, "");
     const filename = `${req.user.uid}_${timestamp}.webp`;
-    console.log("Uploading file:", filename);
     const blob = plants.file(
       `${req.user.uid}/${req.file.fieldname}/${filename}`
     );
@@ -30,7 +29,6 @@ const saveImage = async (req, res, next) => {
 
     blobStream.on("finish", () => {
       const publicUrl = `https://storage.googleapis.com/${plants.name}/${blob.name}`;
-      console.log("File uploaded successfully:", publicUrl);
       req.file.publicUrl = publicUrl;
       next();
     });

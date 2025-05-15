@@ -121,7 +121,6 @@ export const chatWithModel = async (req, res) => {
     //   parts: [{ text: responseText }],
     // });
 
-    // console.log(JSON.stringify(chatHistory, null, 4));
     res.json({ response: responseText });
   } catch (error) {
     console.error("Chat error:", error);
