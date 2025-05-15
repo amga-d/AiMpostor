@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:agriwise/widgets/history_drawer.dart';
+import 'package:agriwise/services/http_service.dart';
 
-class SeedingQualityResultScreen extends StatelessWidget {
-  final XFile imageFile;
+class SeedingQualityResultScreen extends StatefulWidget {
+  final File imageFile;
   final Map<String, dynamic> result;
 
   const SeedingQualityResultScreen({
@@ -12,8 +14,58 @@ class SeedingQualityResultScreen extends StatelessWidget {
   }) : super();
 
   @override
+  State<SeedingQualityResultScreen> createState() =>
+      _SeedingQualityResultScreenState();
+}
+
+class _SeedingQualityResultScreenState
+    extends State<SeedingQualityResultScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  Map<String, dynamic> history = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchHistory();
+  }
+
+  Future<void> _fetchHistory() async {
+    try {
+      final Map<String, dynamic> fetchedHistory =
+          await HttpService().getSeedQualityHistory();
+
+      setState(() {
+        history = fetchedHistory;
+      });
+    } catch (e) {
+      // Handle error
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error fetching history: $e')));
+      }
+    } finally {
+      if (history.containsKey('assessments') &&
+          history['assessments'] != null) {
+        for (var assessment in history['assessments']) {
+          final createdAt = assessment['createdAt'];
+          if (createdAt != null && createdAt['_seconds'] != null) {
+            final date = DateTime.fromMillisecondsSinceEpoch(
+              createdAt['_seconds'] * 1000,
+            );
+            final formattedDate =
+                '${date.day} - ${date.month.toString().padLeft(2, '0')}';
+            assessment['formattedDate'] = formattedDate;
+          }
+        }
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: const Color(0xFFF7F7F7),
@@ -30,15 +82,36 @@ class SeedingQualityResultScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/seed_quality',
+              (Route<dynamic> route) => false,
+            );
           },
         ),
         actions: [
           IconButton(
             icon: const Icon(Icons.history, color: Colors.black),
-            onPressed: () {},
+            onPressed: () {
+              _scaffoldKey.currentState?.openEndDrawer();
+            },
           ),
         ],
+      ),
+      endDrawer: HistoryDrawer(
+        history: history,
+        onHistoryItemTap: (file, assessment) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder:
+                  (context) => SeedingQualityResultScreen(
+                    imageFile: file,
+                    result: assessment,
+                  ),
+            ),
+          );
+        },
       ),
       body: Align(
         alignment: Alignment.topCenter,
@@ -58,7 +131,7 @@ class SeedingQualityResultScreen extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(16),
                 child: Image.file(
-                  File(imageFile.path),
+                  File(widget.imageFile.path),
                   width: double.infinity,
                   height: 250,
                   fit: BoxFit.cover,
@@ -93,7 +166,9 @@ class SeedingQualityResultScreen extends StatelessWidget {
                       width: 20,
                       height: 20,
                       decoration: BoxDecoration(
-                        color: _getQualityColor(result['qualityAssessment']),
+                        color: _getQualityColor(
+                          widget.result['qualityAssessment'],
+                        ),
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(
@@ -104,11 +179,13 @@ class SeedingQualityResultScreen extends StatelessWidget {
                     ),
                     const SizedBox(width: 12),
                     Text(
-                      'Quality: ${result['qualityAssessment']}',
+                      'Quality: ${widget.result['qualityAssessment']}',
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
-                        color: _getQualityColor(result['qualityAssessment']),
+                        color: _getQualityColor(
+                          widget.result['qualityAssessment'],
+                        ),
                       ),
                     ),
                   ],
@@ -137,7 +214,7 @@ class SeedingQualityResultScreen extends StatelessWidget {
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
-                        'Recommendation: kj${result['recommendation']}',
+                        'Recommendation: ${widget.result['recommendation']}',
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,

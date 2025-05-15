@@ -118,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             'assets/icons/pest_forecast.svg',
                           ),
                           onTap: () {
-                            Navigator.pushNamed(context, '/diseaseDetection');
+                            Navigator.pushNamed(context, '/disease_detection');
                           },
                         ),
                         _buildFeatureCard(

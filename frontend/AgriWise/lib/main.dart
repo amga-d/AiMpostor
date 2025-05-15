@@ -35,8 +35,7 @@ class MyApp extends StatelessWidget {
         '/splash': (context) => const SplashScreen(),
         '/seed_quality': (context) => const SeedingQualityScreen(),
         '/disease_detection': (context) => const DiseaseDetectionScreen(),
-
-
+        '/fertilizer_recipe': (context) => const FertilizerRecipeScreen(),
       },
     );
   }

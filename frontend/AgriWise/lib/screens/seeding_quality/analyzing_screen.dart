@@ -7,7 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:async';
 
 class SeedingQualityAnalyzingScreen extends StatefulWidget {
-  final XFile imageFile;
+  final File imageFile;
 
   const SeedingQualityAnalyzingScreen({required this.imageFile}) : super();
 
@@ -82,12 +82,6 @@ class _SeedingQualityAnalyzingScreenState
             Navigator.pop(context);
           },
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.history, color: Colors.black),
-            onPressed: () {},
-          ),
-        ],
       ),
       body: Center(
         child: Column(
