@@ -117,7 +117,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           iconData: SvgPicture.asset(
                             'assets/icons/pest_forecast.svg',
                           ),
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.pushNamed(context, '/diseaseDetection');
+                          },
                         ),
                         _buildFeatureCard(
                           title: 'Seeding Quality',
@@ -133,8 +135,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           iconData: SvgPicture.asset(
                             'assets/icons/ferilizer_recipe.svg',
                           ),
-                          onTap: () async {
-                            Navigator.pushNamed(context, '/disease_detection');
+
+                          onTap: () {
+                            Navigator.pushNamed(context, '/fertilizer_recipe');
                           },
                         ),
                       ],
