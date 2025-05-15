@@ -1,6 +1,7 @@
 import 'package:agriwise/screens/disease_detection/disease_detection_screen.dart';
 import 'package:agriwise/screens/home_screen.dart';
 import 'package:agriwise/screens/login_screen.dart';
+import 'package:agriwise/screens/pest_forecast/pest_forecast_screen.dart';
 import 'package:agriwise/screens/register_screen.dart';
 import 'package:agriwise/screens/splash_screen.dart';
 import 'package:agriwise/screens/seeding_quality/seeding_quality_screen.dart';
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const HomeScreen(),
         '/splash': (context) => const SplashScreen(),
         '/seed_quality': (context) => const SeedingQualityScreen(),
-        '/disease_detection': (context) => const DiseaseDetectionScreen(),
+        '/diseaseDetection': (context) => const DiseaseDetectionScreen(),
         '/fertilizer_recipe': (context) => const FertilizerRecipeScreen(),
       },
     );

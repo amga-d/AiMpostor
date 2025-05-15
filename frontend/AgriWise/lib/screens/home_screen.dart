@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:agriwise/services/auth_services.dart';
+import 'package:agriwise/screens/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -118,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             'assets/icons/pest_forecast.svg',
                           ),
                           onTap: () {
-                            Navigator.pushNamed(context, '/disease_detection');
+                            Navigator.pushNamed(context, '/pest_forecast');
                           },
                         ),
                         _buildFeatureCard(
@@ -133,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         _buildFeatureCard(
                           title: 'Fertilizer Recipe',
                           iconData: SvgPicture.asset(
-                            'assets/icons/ferilizer_recipe.svg',
+                            'assets/icons/fertilizer2-removebg-preview.svg.svg',
                           ),
 
                           onTap: () {
@@ -149,32 +150,65 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: NavigationBar(
-        backgroundColor: Colors.white,
-        shadowColor: Colors.black,
-        elevation: 100, // Adjusted elevation to match the shadow intensity
-        destinations: [
-          NavigationDestination(
-            icon: Icon(
-              Icons.home,
-              color: _selectedIndex == 0 ? Colors.green : Colors.black,
-            ),
-            label: "Home",
-          ),
-          NavigationDestination(
-            icon: Icon(
-              Icons.person,
-              color: _selectedIndex == 1 ? Colors.green : Colors.black,
-            ),
-            label: "Profile",
+      bottomNavigationBar: _buildBottomNavBar(),
+    );
+  }
+
+  Widget _buildBottomNavBar() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            spreadRadius: 2,
+            blurRadius: 8,
+            offset: const Offset(0, -1),
           ),
         ],
-        onDestinationSelected: (int value) {
-          setState(() {
-            _selectedIndex = value;
-          });
-        },
-        selectedIndex: _selectedIndex,
+        border: Border(top: BorderSide(color: Colors.grey.shade300, width: 1)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 15),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            _buildNavItem(Icons.home, 'Home', _selectedIndex == 0),
+            _buildNavItem(Icons.person, 'Profile', _selectedIndex == 1),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNavItem(IconData icon, String label, bool isSelected) {
+    final color = isSelected ? const Color(0xFF3C8D40) : Colors.grey;
+
+    return GestureDetector(
+      onTap: () {
+        if (label == 'Home') {
+          if (_selectedIndex != 0) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const HomeScreen()),
+            );
+          }
+        } else if (label == 'Profile') {
+          if (_selectedIndex != 1) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const ProfileScreen()),
+            );
+          }
+        }
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: color),
+          const SizedBox(height: 4),
+          Text(label, style: TextStyle(color: color, fontSize: 12)),
+        ],
       ),
     );
   }

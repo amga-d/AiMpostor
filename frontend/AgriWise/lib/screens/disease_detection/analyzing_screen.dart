@@ -7,6 +7,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:async';
 
+import 'package:agriwise/screens/home_screen.dart';
+import 'package:agriwise/screens/profile_screen.dart';
+
 class AnalyzingScreen extends StatefulWidget {
   final XFile imageFile;
 
@@ -17,6 +20,9 @@ class AnalyzingScreen extends StatefulWidget {
 }
 
 class _AnalyzingScreenState extends State<AnalyzingScreen> {
+
+  int _selectedIndex = 0; // 0 for Home since this is not Profile
+
   int _dotCount = 1;
   Timer? _timer;
 

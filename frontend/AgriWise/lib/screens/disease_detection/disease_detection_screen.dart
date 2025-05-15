@@ -4,6 +4,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:io';
 
+import 'package:agriwise/screens/home_screen.dart';
+import 'package:agriwise/screens/profile_screen.dart';
+
 class DiseaseDetectionScreen extends StatefulWidget {
   const DiseaseDetectionScreen({Key? key}) : super(key: key);
 
@@ -12,6 +15,9 @@ class DiseaseDetectionScreen extends StatefulWidget {
 }
 
 class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
+
+  int _selectedIndex = 0; // 0 for Home since this is not Profile
+
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final ImagePicker _picker = ImagePicker();
 
@@ -300,13 +306,32 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
   Widget _buildNavItem(IconData icon, String label, bool isSelected) {
     final color = isSelected ? const Color(0xFF3C8D40) : Colors.grey;
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, color: color),
-        const SizedBox(height: 4),
-        Text(label, style: TextStyle(color: color, fontSize: 12)),
-      ],
+    return GestureDetector(
+      onTap: () {
+        if (label == 'Home') {
+          if (_selectedIndex != 0) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const HomeScreen()),
+            );
+          }
+        } else if (label == 'Profile') {
+          if (_selectedIndex != 1) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const ProfileScreen()),
+            );
+          }
+        }
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: color),
+          const SizedBox(height: 4),
+          Text(label, style: TextStyle(color: color, fontSize: 12)),
+        ],
+      ),
     );
   }
 }

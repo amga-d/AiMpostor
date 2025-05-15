@@ -3,11 +3,23 @@ import 'package:agriwise/screens/seeding_quality/analyzing_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
-class SeedingQualityPhotoPreviewScreen extends StatelessWidget {
+import 'package:agriwise/screens/home_screen.dart';
+import 'package:agriwise/screens/profile_screen.dart';
+
+class SeedingQualityPhotoPreviewScreen extends StatefulWidget {
   final XFile imageFile;
 
   const SeedingQualityPhotoPreviewScreen({Key? key, required this.imageFile})
     : super(key: key);
+
+  @override
+  State<SeedingQualityPhotoPreviewScreen> createState() =>
+      _SeedingQualityPhotoPreviewScreenState();
+}
+
+class _SeedingQualityPhotoPreviewScreenState
+    extends State<SeedingQualityPhotoPreviewScreen> {
+  int _selectedIndex = 0; // 0 for Home since this is not Profile
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +88,7 @@ class SeedingQualityPhotoPreviewScreen extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(16),
                 child: Image.file(
-                  File(imageFile.path),
+                  File(widget.imageFile.path),
                   width: double.infinity,
                   height: 250,
                   fit: BoxFit.cover,
@@ -121,6 +133,7 @@ class SeedingQualityPhotoPreviewScreen extends StatelessWidget {
                     height: 45,
                     child: ElevatedButton.icon(
                       onPressed: () {
+                        _analyzeImage(context, widget.imageFile);
                         _analyzeImage(context, File(imageFile.path));
                       },
                       icon: const Icon(Icons.check, color: Colors.white),
@@ -191,13 +204,32 @@ class SeedingQualityPhotoPreviewScreen extends StatelessWidget {
   Widget _buildNavItem(IconData icon, String label, bool isSelected) {
     final color = isSelected ? const Color(0xFF3C8D40) : Colors.grey;
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, color: color),
-        const SizedBox(height: 4),
-        Text(label, style: TextStyle(color: color, fontSize: 12)),
-      ],
+    return GestureDetector(
+      onTap: () {
+        if (label == 'Home') {
+          if (_selectedIndex != 0) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const HomeScreen()),
+            );
+          }
+        } else if (label == 'Profile') {
+          if (_selectedIndex != 1) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const ProfileScreen()),
+            );
+          }
+        }
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: color),
+          const SizedBox(height: 4),
+          Text(label, style: TextStyle(color: color, fontSize: 12)),
+        ],
+      ),
     );
   }
 }
