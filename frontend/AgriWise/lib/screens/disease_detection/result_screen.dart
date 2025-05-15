@@ -22,14 +22,14 @@ class _ResultScreenState extends State<ResultScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final response = results['response'] ?? {};
+    final response = widget.results['response'] ?? {};
     final crop = response['crop'] ?? 'Unknown';
     final detectedDisease = response['detectedDisease'] ?? 'Unknown';
     final riskLevel = response['riskLevel'] ?? 'Unknown';
     final aboutDisease =
         response['aboutDisease'] ?? 'No information available.';
     final recommendedActions = response['recommendedAction'] ?? [];
-    final chatId = results['chatId'] ?? 'Unknown';
+    final chatId = widget.results['chatId'] ?? 'Unknown';
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(

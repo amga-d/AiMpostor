@@ -20,7 +20,6 @@ class SeedingQualityAnalyzingScreen extends StatefulWidget {
 }
 
 class _SeedingQualityAnalyzingScreenState
-
     extends State<SeedingQualityAnalyzingScreen> {
   int _selectedIndex = 0; // 0 for Home since this is not Profile
   int _dotCount = 1;

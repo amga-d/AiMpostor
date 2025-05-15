@@ -134,7 +134,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         _buildFeatureCard(
                           title: 'Fertilizer Recipe',
                           iconData: SvgPicture.asset(
-                            'assets/icons/fertilizer2-removebg-preview.svg.svg',
+                            'assets/icons/fertilizer2-removebg-preview.svg',
+                            width: 70,
                           ),
 
                           onTap: () {

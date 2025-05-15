@@ -1,3 +1,5 @@
+import 'package:agriwise/services/http_service.dart';
+import 'package:agriwise/widgets/history_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -5,14 +7,16 @@ import 'dart:io';
 import 'package:agriwise/screens/home_screen.dart';
 import 'package:agriwise/screens/profile_screen.dart';
 
-
 class SeedingQualityResultScreen extends StatefulWidget {
   final File imageFile;
   final Map<String, dynamic> result;
 
-  const SeedingQualityResultScreen({Key? key, required this.imageFile})
-    : super(key: key);
- @override
+  const SeedingQualityResultScreen({
+    Key? key,
+    required this.imageFile,
+    required this.result,
+  }) : super(key: key);
+  @override
   State<SeedingQualityResultScreen> createState() =>
       _SeedingQualityResultScreenState();
 }
@@ -20,7 +24,7 @@ class SeedingQualityResultScreen extends StatefulWidget {
 class _SeedingQualityResultScreenState
     extends State<SeedingQualityResultScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-   int _selectedIndex = 0; // 0 for Home since this is not Profile
+  int _selectedIndex = 0; // 0 for Home since this is not Profile
   Map<String, dynamic> history = {};
 
   @override
@@ -61,6 +65,7 @@ class _SeedingQualityResultScreenState
       }
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -130,7 +135,7 @@ class _SeedingQualityResultScreenState
               ClipRRect(
                 borderRadius: BorderRadius.circular(16),
                 child: Image.file(
-                  File(imageFile.path),
+                  File(widget.imageFile.path),
                   width: double.infinity,
                   height: 250,
                   fit: BoxFit.cover,
@@ -277,13 +282,6 @@ class _SeedingQualityResultScreenState
   Widget _buildNavItem(IconData icon, String label, bool isSelected) {
     final color = isSelected ? const Color(0xFF3C8D40) : Colors.grey;
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, color: color),
-        const SizedBox(height: 4),
-        Text(label, style: TextStyle(color: color, fontSize: 12)),
-      ],
     return GestureDetector(
       onTap: () {
         if (label == 'Home') {

@@ -133,8 +133,8 @@ class _SeedingQualityPhotoPreviewScreenState
                     height: 45,
                     child: ElevatedButton.icon(
                       onPressed: () {
-                        _analyzeImage(context, widget.imageFile);
-                        _analyzeImage(context, File(imageFile.path));
+                        // _analyzeImage(context, widget.imageFile);;
+                        _analyzeImage(context, File(widget.imageFile.path));
                       },
                       icon: const Icon(Icons.check, color: Colors.white),
                       label: const Text(
