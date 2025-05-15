@@ -5,14 +5,14 @@ import 'package:agriwise/screens/home_screen.dart';
 import 'package:agriwise/screens/profile_screen.dart';
 
 class PestChatScreen extends StatefulWidget {
-  const PestChatScreen({Key? key}) : super(key: key);
+  const PestChatScreen({super.key});
 
   @override
   State<PestChatScreen> createState() => _PestChatScreenState();
 }
 
 class _PestChatScreenState extends State<PestChatScreen> {
-  int _selectedIndex = 0; // 0 for Home since this is not Profile
+  final int _selectedIndex = 0; // 0 for Home since this is not Profile
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 

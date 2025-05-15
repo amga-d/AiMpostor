@@ -9,8 +9,7 @@ import 'package:agriwise/screens/profile_screen.dart';
 class SeedingQualityPhotoPreviewScreen extends StatefulWidget {
   final XFile imageFile;
 
-  const SeedingQualityPhotoPreviewScreen({Key? key, required this.imageFile})
-    : super(key: key);
+  const SeedingQualityPhotoPreviewScreen({super.key, required this.imageFile});
 
   @override
   State<SeedingQualityPhotoPreviewScreen> createState() =>
@@ -19,7 +18,7 @@ class SeedingQualityPhotoPreviewScreen extends StatefulWidget {
 
 class _SeedingQualityPhotoPreviewScreenState
     extends State<SeedingQualityPhotoPreviewScreen> {
-  int _selectedIndex = 0; // 0 for Home since this is not Profile
+  final int _selectedIndex = 0; // 0 for Home since this is not Profile
 
   @override
   Widget build(BuildContext context) {

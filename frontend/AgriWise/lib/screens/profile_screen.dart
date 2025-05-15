@@ -4,14 +4,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:agriwise/screens/home_screen.dart'; // Import HomeScreen
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({super.key});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  int _selectedIndex = 1; // 1 for Profile since this is the Profile screen
+  final int _selectedIndex = 1; // 1 for Profile since this is the Profile screen
 
   // Sample user data - just name
   final String _userName =

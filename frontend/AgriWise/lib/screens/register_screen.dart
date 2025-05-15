@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
+  @override
   State<RegisterScreen> createState() => _RegisterScreenState();
 }
 

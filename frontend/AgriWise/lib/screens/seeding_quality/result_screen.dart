@@ -1,7 +1,6 @@
 import 'package:agriwise/services/http_service.dart';
 import 'package:agriwise/widgets/history_drawer.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
 import 'package:agriwise/screens/home_screen.dart';
@@ -12,10 +11,10 @@ class SeedingQualityResultScreen extends StatefulWidget {
   final Map<String, dynamic> result;
 
   const SeedingQualityResultScreen({
-    Key? key,
+    super.key,
     required this.imageFile,
     required this.result,
-  }) : super(key: key);
+  });
   @override
   State<SeedingQualityResultScreen> createState() =>
       _SeedingQualityResultScreenState();
@@ -24,7 +23,7 @@ class SeedingQualityResultScreen extends StatefulWidget {
 class _SeedingQualityResultScreenState
     extends State<SeedingQualityResultScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  int _selectedIndex = 0; // 0 for Home since this is not Profile
+  final int _selectedIndex = 0; // 0 for Home since this is not Profile
   Map<String, dynamic> history = {};
 
   @override

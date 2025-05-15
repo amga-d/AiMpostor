@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:agriwise/screens/pest_forecast/pest_chat_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:agriwise/screens/home_screen.dart';
 import 'package:agriwise/screens/profile_screen.dart';
 
 class PestForecastScreen extends StatefulWidget {
-  const PestForecastScreen({Key? key}) : super(key: key);
+  const PestForecastScreen({super.key});
 
   @override
   State<PestForecastScreen> createState() => _PestForecastScreenState();
@@ -22,11 +21,21 @@ class _PestForecastScreenState extends State<PestForecastScreen> {
   List<Map<String, dynamic>> _pests = [];
 
   // Navigation state
-  int _selectedIndex = 0;
+  final int _selectedIndex = 0;
 
   final List<String> _months = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
   ];
 
   @override
@@ -73,10 +82,7 @@ class _PestForecastScreenState extends State<PestForecastScreen> {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(25),
-            border: Border.all(
-              color: const Color(0xffA8A8A8),
-              width: 1,
-            ),
+            border: Border.all(color: const Color(0xffA8A8A8), width: 1),
           ),
           child: SingleChildScrollView(
             child: Padding(
@@ -108,12 +114,17 @@ class _PestForecastScreenState extends State<PestForecastScreen> {
                               child: TextField(
                                 controller: _locationController,
                                 decoration: InputDecoration(
-                                  hintText: _hasSearched ? 'Yogyakarta' : 'Search Location',
+                                  hintText:
+                                      _hasSearched
+                                          ? 'Yogyakarta'
+                                          : 'Search Location',
                                   hintStyle: TextStyle(
                                     fontSize: 14,
                                     color: Colors.grey.shade600,
                                   ),
-                                  contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                  ),
                                   border: InputBorder.none,
                                 ),
                               ),
@@ -143,12 +154,15 @@ class _PestForecastScreenState extends State<PestForecastScreen> {
                               child: TextField(
                                 controller: _cropController,
                                 decoration: InputDecoration(
-                                  hintText: _hasSearched ? 'Rice' : 'Select Crop',
+                                  hintText:
+                                      _hasSearched ? 'Rice' : 'Select Crop',
                                   hintStyle: TextStyle(
                                     fontSize: 14,
                                     color: Colors.grey.shade600,
                                   ),
-                                  contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                  ),
                                   border: InputBorder.none,
                                 ),
                               ),
@@ -192,12 +206,15 @@ class _PestForecastScreenState extends State<PestForecastScreen> {
                                     _searchPests();
                                   });
                                 },
-                                items: _months.map<DropdownMenuItem<String>>((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
+                                items:
+                                    _months.map<DropdownMenuItem<String>>((
+                                      String value,
+                                    ) {
+                                      return DropdownMenuItem<String>(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList(),
                               ),
                             ),
                           ),
@@ -214,10 +231,7 @@ class _PestForecastScreenState extends State<PestForecastScreen> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: IconButton(
-                            icon: const Icon(
-                              Icons.search,
-                              color: Colors.white,
-                            ),
+                            icon: const Icon(Icons.search, color: Colors.white),
                             onPressed: _searchPests,
                           ),
                         ),
@@ -255,26 +269,34 @@ class _PestForecastScreenState extends State<PestForecastScreen> {
           {
             'name': 'Leafhopper',
             'likelihood': 98,
-            'description': 'Small insects that suck plant sap and can transmit diseases, causing yellowing and wilting.',
-            'handling': 'Remove affected leaves and use insecticidal soap or neem oil.',
+            'description':
+                'Small insects that suck plant sap and can transmit diseases, causing yellowing and wilting.',
+            'handling':
+                'Remove affected leaves and use insecticidal soap or neem oil.',
           },
           {
             'name': 'Leafminer',
             'likelihood': 98,
-            'description': 'Larvae that tunnel inside leaves, leaving visible trails and causing leaf damage.',
-            'handling': 'Prune infested leaves and apply neem oil or organic insecticides.',
+            'description':
+                'Larvae that tunnel inside leaves, leaving visible trails and causing leaf damage.',
+            'handling':
+                'Prune infested leaves and apply neem oil or organic insecticides.',
           },
           {
             'name': 'Aphids',
             'likelihood': 98,
-            'description': 'Small insects that suck plant sap and can transmit diseases, causing yellowing and wilting.',
-            'handling': 'Remove affected leaves and use insecticidal soap or neem oil.',
+            'description':
+                'Small insects that suck plant sap and can transmit diseases, causing yellowing and wilting.',
+            'handling':
+                'Remove affected leaves and use insecticidal soap or neem oil.',
           },
           {
             'name': 'Thrips',
             'likelihood': 98,
-            'description': 'Small insects that suck plant sap and can transmit diseases, causing yellowing and wilting.',
-            'handling': 'Remove affected leaves and use insecticidal soap or neem oil.',
+            'description':
+                'Small insects that suck plant sap and can transmit diseases, causing yellowing and wilting.',
+            'handling':
+                'Remove affected leaves and use insecticidal soap or neem oil.',
           },
         ];
       } else {
@@ -292,28 +314,20 @@ class _PestForecastScreenState extends State<PestForecastScreen> {
           'assets/icons/plant.svg',
           height: 120,
           width: 120,
-          placeholderBuilder: (context) => const Icon(
-            Icons.eco,
-            size: 100,
-            color: Color(0xFF3C8D40),
-          ),
+          placeholderBuilder:
+              (context) =>
+                  const Icon(Icons.eco, size: 100, color: Color(0xFF3C8D40)),
         ),
         const SizedBox(height: 24),
         const Text(
           'Looks Like You\'re in the Clear!',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 8),
         const Text(
           'No pests detected. Everything looks good for now',
-          style: TextStyle(
-            fontSize: 14,
-            color: Colors.black87,
-          ),
+          style: TextStyle(fontSize: 14, color: Colors.black87),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 40),
@@ -328,10 +342,7 @@ class _PestForecastScreenState extends State<PestForecastScreen> {
       children: [
         const Text(
           'Potential Pests Found',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 16),
 
@@ -363,7 +374,9 @@ class _PestForecastScreenState extends State<PestForecastScreen> {
                       ),
                       Container(
                         height: 20,
-                        width: (MediaQuery.of(context).size.width - 220) * (_pests[index]['likelihood'] / 100),
+                        width:
+                            (MediaQuery.of(context).size.width - 220) *
+                            (_pests[index]['likelihood'] / 100),
                         decoration: BoxDecoration(
                           color: Colors.orange,
                           borderRadius: BorderRadius.circular(10),
@@ -428,7 +441,7 @@ class _PestForecastScreenState extends State<PestForecastScreen> {
               const SizedBox(height: 16),
             ],
           );
-        }).toList(),
+        }),
 
         // Ask AI button
         const SizedBox(height: 16),
@@ -460,10 +473,7 @@ class _PestForecastScreenState extends State<PestForecastScreen> {
               ),
               child: const Text(
                 'Ask AI Now',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
               ),
             ),
           ),
@@ -486,9 +496,7 @@ class _PestForecastScreenState extends State<PestForecastScreen> {
             offset: const Offset(0, -1),
           ),
         ],
-        border: Border(
-          top: BorderSide(color: Colors.grey.shade300, width: 1),
-        ),
+        border: Border(top: BorderSide(color: Colors.grey.shade300, width: 1)),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 15),
@@ -529,10 +537,7 @@ class _PestForecastScreenState extends State<PestForecastScreen> {
         children: [
           Icon(icon, color: color),
           const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(color: color, fontSize: 12),
-          ),
+          Text(label, style: TextStyle(color: color, fontSize: 12)),
         ],
       ),
     );
@@ -541,7 +546,7 @@ class _PestForecastScreenState extends State<PestForecastScreen> {
 
 // PestChatScreen for "Ask AI Now" functionality
 class PestChatScreen extends StatefulWidget {
-  const PestChatScreen({Key? key}) : super(key: key);
+  const PestChatScreen({super.key});
 
   @override
   State<PestChatScreen> createState() => _PestChatScreenState();
@@ -549,22 +554,20 @@ class PestChatScreen extends StatefulWidget {
 
 class _PestChatScreenState extends State<PestChatScreen> {
   // Navigation state
-  int _selectedIndex = 0;
+  final int _selectedIndex = 0;
 
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
   final List<Map<String, dynamic>> _messages = [
-    {
-      'text': "Hello, how can I help you?",
-      'isUser': false,
-    },
+    {'text': "Hello, how can I help you?", 'isUser': false},
     {
       'text': "How serious is Bacterial Leaf Blight and should I be worried?",
       'isUser': true,
     },
     {
-      'text': "There are many programming languages in the market that are used in designing and building websites, various applications and oBacterial Leaf Blight can significantly reduce rice yield if left untreated, especially during the early growth stages. However, with prompt treatment and good field management, the damage can be minimized. Monitor your crops daily, apply recommended bactericides, and ensure proper irrigation practices.",
+      'text':
+          "There are many programming languages in the market that are used in designing and building websites, various applications and oBacterial Leaf Blight can significantly reduce rice yield if left untreated, especially during the early growth stages. However, with prompt treatment and good field management, the damage can be minimized. Monitor your crops daily, apply recommended bactericides, and ensure proper irrigation practices.",
       'isUser': false,
     },
   ];
@@ -606,10 +609,7 @@ class _PestChatScreenState extends State<PestChatScreen> {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(25),
-            border: Border.all(
-              color: const Color(0xffA8A8A8),
-              width: 1,
-            ),
+            border: Border.all(color: const Color(0xffA8A8A8), width: 1),
           ),
           child: Column(
             children: [
@@ -636,16 +636,17 @@ class _PestChatScreenState extends State<PestChatScreen> {
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(24),
-                          border: Border.all(
-                            color: Colors.grey.shade300,
-                          ),
+                          border: Border.all(color: Colors.grey.shade300),
                         ),
                         child: TextField(
                           controller: _messageController,
                           decoration: InputDecoration(
                             hintText: 'Type your question',
                             border: InputBorder.none,
-                            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 12,
+                            ),
                           ),
                         ),
                       ),
@@ -657,7 +658,10 @@ class _PestChatScreenState extends State<PestChatScreen> {
                         shape: BoxShape.circle,
                       ),
                       child: IconButton(
-                        icon: const Icon(Icons.arrow_forward, color: Colors.white),
+                        icon: const Icon(
+                          Icons.arrow_forward,
+                          color: Colors.white,
+                        ),
                         onPressed: _sendMessage,
                       ),
                     ),
@@ -679,17 +683,15 @@ class _PestChatScreenState extends State<PestChatScreen> {
     _messageController.clear();
 
     setState(() {
-      _messages.add({
-        'text': messageText,
-        'isUser': true,
-      });
+      _messages.add({'text': messageText, 'isUser': true});
     });
 
     // Auto reply (simulated)
     Future.delayed(const Duration(seconds: 1), () {
       setState(() {
         _messages.add({
-          'text': "Thank you for your question about pests. I'll provide more detailed guidance based on your specific concerns. Generally, early detection and integrated pest management practices are key to minimizing crop damage.",
+          'text':
+              "Thank you for your question about pests. I'll provide more detailed guidance based on your specific concerns. Generally, early detection and integrated pest management practices are key to minimizing crop damage.",
           'isUser': false,
         });
       });
@@ -716,14 +718,9 @@ class _PestChatScreenState extends State<PestChatScreen> {
         decoration: BoxDecoration(
           color: isUser ? Colors.white : Colors.grey.shade200,
           borderRadius: BorderRadius.circular(16),
-          border: isUser
-              ? Border.all(color: Colors.grey.shade300)
-              : null,
+          border: isUser ? Border.all(color: Colors.grey.shade300) : null,
         ),
-        child: Text(
-          text,
-          style: const TextStyle(fontSize: 14),
-        ),
+        child: Text(text, style: const TextStyle(fontSize: 14)),
       ),
     );
   }
@@ -741,9 +738,7 @@ class _PestChatScreenState extends State<PestChatScreen> {
             offset: const Offset(0, -1),
           ),
         ],
-        border: Border(
-          top: BorderSide(color: Colors.grey.shade300, width: 1),
-        ),
+        border: Border(top: BorderSide(color: Colors.grey.shade300, width: 1)),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 15),
@@ -784,10 +779,7 @@ class _PestChatScreenState extends State<PestChatScreen> {
         children: [
           Icon(icon, color: color),
           const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(color: color, fontSize: 12),
-          ),
+          Text(label, style: TextStyle(color: color, fontSize: 12)),
         ],
       ),
     );

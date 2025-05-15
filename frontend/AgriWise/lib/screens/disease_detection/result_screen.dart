@@ -10,15 +10,14 @@ import 'package:agriwise/screens/profile_screen.dart';
 class ResultScreen extends StatefulWidget {
   final File imageFile;
   final Map<String, dynamic> results;
-  const ResultScreen({required this.imageFile, required this.results})
-    : super();
+  const ResultScreen({super.key, required this.imageFile, required this.results});
 
   @override
   State<ResultScreen> createState() => _ResultScreenState();
 }
 
 class _ResultScreenState extends State<ResultScreen> {
-  int _selectedIndex = 0; // 0 for Home since this is not Profile
+  final int _selectedIndex = 0; // 0 for Home since this is not Profile
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final List<dynamic> _history = [];
 

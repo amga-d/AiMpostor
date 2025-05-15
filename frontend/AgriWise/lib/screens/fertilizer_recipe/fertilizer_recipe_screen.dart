@@ -5,14 +5,14 @@ import 'package:agriwise/screens/home_screen.dart';
 import 'package:agriwise/screens/profile_screen.dart';
 
 class FertilizerRecipeScreen extends StatefulWidget {
-  const FertilizerRecipeScreen({Key? key}) : super(key: key);
+  const FertilizerRecipeScreen({super.key});
 
   @override
   State<FertilizerRecipeScreen> createState() => _FertilizerRecipeScreenState();
 }
 
 class _FertilizerRecipeScreenState extends State<FertilizerRecipeScreen> {
-  int _selectedIndex = 0; // 0 for Home since this is not Profile
+  final int _selectedIndex = 0; // 0 for Home since this is not Profile
   final TextEditingController _materialsController = TextEditingController();
   final TextEditingController _plantsController = TextEditingController();
   bool _showRecipe = false;
@@ -49,20 +49,12 @@ class _FertilizerRecipeScreenState extends State<FertilizerRecipeScreen> {
         materialsInput,
       );
 
-      if (response != null) {
-        setState(() {
-          _plantType = response['plant'] ?? plantInput;
-          _recipeData = response;
-          _showRecipe = true;
-        });
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Failed to get recipe. Please try again.'),
-          ),
-        );
-      }
-    } catch (e) {
+      setState(() {
+        _plantType = response['plant'] ?? plantInput;
+        _recipeData = response;
+        _showRecipe = true;
+      });
+        } catch (e) {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text('Error: ${e.toString()}')));

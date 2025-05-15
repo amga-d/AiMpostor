@@ -3,21 +3,17 @@ import 'package:agriwise/screens/disease_detection/analyzing_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
-import 'package:agriwise/screens/home_screen.dart';
-import 'package:agriwise/screens/profile_screen.dart';
-
 class PhotoPreviewScreen extends StatefulWidget {
   final XFile imageFile;
 
-  const PhotoPreviewScreen({Key? key, required this.imageFile})
-    : super(key: key);
+  const PhotoPreviewScreen({super.key, required this.imageFile});
 
   @override
   State<PhotoPreviewScreen> createState() => _PhotoPreviewScreenState();
 }
 
 class _PhotoPreviewScreenState extends State<PhotoPreviewScreen> {
-  int _selectedIndex = 0; // 0 for Home since this is not Profile
+  final int _selectedIndex = 0; // 0 for Home since this is not Profile
   @override
   Widget build(BuildContext context) {
     return Scaffold(

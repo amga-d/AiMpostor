@@ -16,14 +16,14 @@ class ChatbotScreen extends StatefulWidget {
   final String chatId;
   final File? imageFile;
 
-  const ChatbotScreen({required this.chatId, this.imageFile}) : super();
+  const ChatbotScreen({super.key, required this.chatId, this.imageFile});
 
   @override
   State<ChatbotScreen> createState() => _ChatbotScreenState();
 }
 
 class _ChatbotScreenState extends State<ChatbotScreen> {
-  int _selectedIndex = 0; // 0 for Home since this is not Profile
+  final int _selectedIndex = 0; // 0 for Home since this is not Profile
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final List<dynamic> _history = [];
 
@@ -119,8 +119,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
   Widget _buildDiseaseInfoCard() {
     final String diseaseName;
     final String detectionDate;
-    if (_diseaseData != null &&
-        _diseaseData.isNotEmpty &&
+    if (_diseaseData.isNotEmpty &&
         _diseaseData['content'] != null) {
       // Extract disease name and date from the report data
       diseaseName =

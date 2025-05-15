@@ -10,14 +10,14 @@ import 'dart:async';
 class AnalyzingScreen extends StatefulWidget {
   final XFile imageFile;
 
-  const AnalyzingScreen({Key? key, required this.imageFile}) : super(key: key);
+  const AnalyzingScreen({super.key, required this.imageFile});
 
   @override
   State<AnalyzingScreen> createState() => _AnalyzingScreenState();
 }
 
 class _AnalyzingScreenState extends State<AnalyzingScreen> {
-  int _selectedIndex = 0; // 0 for Home since this is not Profile
+  final int _selectedIndex = 0; // 0 for Home since this is not Profile
 
   int _dotCount = 1;
   Timer? _timer;

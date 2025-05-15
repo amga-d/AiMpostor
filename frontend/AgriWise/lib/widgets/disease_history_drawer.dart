@@ -5,10 +5,10 @@ class DiseaseHistoryDrawer extends StatelessWidget {
   final Function(String) onHistoryItemTap;
 
   const DiseaseHistoryDrawer({
-    Key? key,
+    super.key,
     required this.history,
     required this.onHistoryItemTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

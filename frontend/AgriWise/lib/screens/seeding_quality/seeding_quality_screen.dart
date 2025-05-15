@@ -10,14 +10,14 @@ import 'package:agriwise/screens/home_screen.dart';
 import 'package:agriwise/screens/profile_screen.dart';
 
 class SeedingQualityScreen extends StatefulWidget {
-  const SeedingQualityScreen({Key? key}) : super(key: key);
+  const SeedingQualityScreen({super.key});
 
   @override
   State<SeedingQualityScreen> createState() => _SeedingQualityScreenState();
 }
 
 class _SeedingQualityScreenState extends State<SeedingQualityScreen> {
-  int _selectedIndex = 0; // 0 for Home since this is not Profile
+  final int _selectedIndex = 0; // 0 for Home since this is not Profile
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final ImagePicker _picker = ImagePicker();
   Map<String, dynamic> history = {};

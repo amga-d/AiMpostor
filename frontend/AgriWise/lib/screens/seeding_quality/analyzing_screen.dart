@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:agriwise/services/http_service.dart';
 import 'package:flutter/material.dart';
 import 'package:agriwise/screens/seeding_quality/result_screen.dart';
-import 'package:image_picker/image_picker.dart';
 import 'dart:async';
 
 import 'package:agriwise/screens/home_screen.dart';
@@ -12,7 +11,7 @@ import 'package:agriwise/screens/profile_screen.dart';
 class SeedingQualityAnalyzingScreen extends StatefulWidget {
   final File imageFile;
 
-  const SeedingQualityAnalyzingScreen({required this.imageFile}) : super();
+  const SeedingQualityAnalyzingScreen({super.key, required this.imageFile});
 
   @override
   State<SeedingQualityAnalyzingScreen> createState() =>
@@ -21,7 +20,7 @@ class SeedingQualityAnalyzingScreen extends StatefulWidget {
 
 class _SeedingQualityAnalyzingScreenState
     extends State<SeedingQualityAnalyzingScreen> {
-  int _selectedIndex = 0; // 0 for Home since this is not Profile
+  final int _selectedIndex = 0; // 0 for Home since this is not Profile
   int _dotCount = 1;
   Timer? _timer;
 

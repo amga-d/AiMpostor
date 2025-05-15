@@ -8,10 +8,10 @@ class HistoryDrawer extends StatelessWidget {
   final Function(File, Map<String, dynamic>) onHistoryItemTap;
 
   const HistoryDrawer({
-    Key? key,
+    super.key,
     required this.history,
     required this.onHistoryItemTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
