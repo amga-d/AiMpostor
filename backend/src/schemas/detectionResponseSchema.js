@@ -2,38 +2,32 @@
 const diseaseSchema = {
   type: "object",
   properties: {
-    diseaseName: {
+    crop: {
       type: "string",
-      description:
-        "The name of the plant disease (e.g., Late Blight, Powdery Mildew).",
+      description: "The name of the crop (e.g., Rice, Wheat).",
     },
-    confidenceLevel: {
-      type: "number",
-      description:
-        "A number between 0 and 1 representing the confidence level of the disease prediction (e.g., 0.85 for 85% confidence).",
-    },
-    symptomsObserved: {
+    detectedDisease: {
       type: "string",
-      description: "Description of the symptoms observed in the image.",
+      description: "The name of the detected disease (e.g., Bacterial Leaf).",
     },
-    mitigationSteps: {
+    riskLevel: {
       type: "string",
-      description:
-        "Easy-to-understand steps farmers can take to mitigate the disease (e.g., 'Apply fungicide, remove affected leaves'). Write in a simple and direct way",
+      description: "The risk level associated with the disease (e.g., High, Medium, Low).",
     },
-    recommendations: {
+    aboutDisease: {
       type: "string",
-      description:
-        "Specific recommendations for treatment or prevention (e.g., 'Use copper-based fungicide every 7 days, ensure proper ventilation'). Write in a simple and direct way",
+      description: "Information about the disease and its effects.",
+    },
+    recommendedAction: {
+      type: "array",
+      items: {
+        type: "string",
+        description: "A recommended action to mitigate the disease.",
+      },
+      description: "List of recommended actions to address the disease.",
     },
   },
-  required: [
-    "diseaseName",
-    "confidenceLevel",
-    "mitigationSteps",
-    "recommendations",
-    "symptomsObserved",
-  ],
+  required: ["crop", "detectedDisease", "riskLevel", "aboutDisease", "recommendedAction"],
 };
 
 export default diseaseSchema;

@@ -9,13 +9,16 @@ import 'package:agriwise/screens/profile_screen.dart';
 class SeedingQualityPhotoPreviewScreen extends StatefulWidget {
   final XFile imageFile;
 
-  const SeedingQualityPhotoPreviewScreen({Key? key, required this.imageFile}) : super(key: key);
+  const SeedingQualityPhotoPreviewScreen({Key? key, required this.imageFile})
+    : super(key: key);
 
   @override
-  State<SeedingQualityPhotoPreviewScreen> createState() => _SeedingQualityPhotoPreviewScreenState();
+  State<SeedingQualityPhotoPreviewScreen> createState() =>
+      _SeedingQualityPhotoPreviewScreenState();
 }
 
-class _SeedingQualityPhotoPreviewScreenState extends State<SeedingQualityPhotoPreviewScreen> {
+class _SeedingQualityPhotoPreviewScreenState
+    extends State<SeedingQualityPhotoPreviewScreen> {
   int _selectedIndex = 0; // 0 for Home since this is not Profile
 
   @override
@@ -130,7 +133,8 @@ class _SeedingQualityPhotoPreviewScreenState extends State<SeedingQualityPhotoPr
                     height: 45,
                     child: ElevatedButton.icon(
                       onPressed: () {
-                        _analyzeImage(context, widget.imageFile);
+                        // _analyzeImage(context, widget.imageFile);;
+                        _analyzeImage(context, File(widget.imageFile.path));
                       },
                       icon: const Icon(Icons.check, color: Colors.white),
                       label: const Text(
@@ -159,7 +163,7 @@ class _SeedingQualityPhotoPreviewScreenState extends State<SeedingQualityPhotoPr
     );
   }
 
-  void _analyzeImage(BuildContext context, XFile imageFile) {
+  void _analyzeImage(BuildContext context, File imageFile) {
     Navigator.push(
       context,
       MaterialPageRoute(

@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:agriwise/services/http_service.dart';
 import 'package:flutter/material.dart';
 import 'package:agriwise/screens/seeding_quality/result_screen.dart';
 import 'package:image_picker/image_picker.dart';
@@ -7,10 +10,9 @@ import 'package:agriwise/screens/home_screen.dart';
 import 'package:agriwise/screens/profile_screen.dart';
 
 class SeedingQualityAnalyzingScreen extends StatefulWidget {
-  final XFile imageFile;
+  final File imageFile;
 
-  const SeedingQualityAnalyzingScreen({Key? key, required this.imageFile})
-    : super(key: key);
+  const SeedingQualityAnalyzingScreen({required this.imageFile}) : super();
 
   @override
   State<SeedingQualityAnalyzingScreen> createState() =>
@@ -18,7 +20,6 @@ class SeedingQualityAnalyzingScreen extends StatefulWidget {
 }
 
 class _SeedingQualityAnalyzingScreenState
-
     extends State<SeedingQualityAnalyzingScreen> {
   int _selectedIndex = 0; // 0 for Home since this is not Profile
   int _dotCount = 1;
@@ -35,20 +36,26 @@ class _SeedingQualityAnalyzingScreenState
       });
     });
 
-    // Simulate analysis delay
-    Timer(const Duration(seconds: 3), () {
-      _timer?.cancel();
-
-      // For now, just navigate to result screen
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder:
-              (context) =>
-                  SeedingQualityResultScreen(imageFile: widget.imageFile),
-        ),
-      );
-    });
+    HttpService()
+        .predictSeedQuality(widget.imageFile)
+        .then((result) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder:
+                  (context) => SeedingQualityResultScreen(
+                    imageFile: widget.imageFile,
+                    result: result,
+                  ),
+            ),
+          );
+        })
+        .catchError((error) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Error: $error')));
+          Navigator.pop(context);
+        });
   }
 
   @override
@@ -79,12 +86,6 @@ class _SeedingQualityAnalyzingScreenState
             Navigator.pop(context);
           },
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.history, color: Colors.black),
-            onPressed: () {},
-          ),
-        ],
       ),
       body: Center(
         child: Column(

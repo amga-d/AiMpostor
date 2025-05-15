@@ -7,6 +7,7 @@ import { PORT } from "./src/config/envConfig.js";
 import chatsRoute from "./src/routes/chatsRoute.js";
 import userRoute from "./src/routes/userRoute.js";
 import seedRoute from "./src/routes/seedRoute.js";
+import fertilizerRoute from "./src/routes/fertilizerRecipeRoute.js";
 
 // Inizialize the logger function
 const logger = morgan("tiny");
@@ -28,6 +29,7 @@ app.use(express.static("public"));
 app.use("/api/v1/chats/", chatsRoute);
 app.use("/api/v1/user/", userRoute);
 app.use("/api/v1/seed/", seedRoute);
+app.use("/api/v1/fertilizer-recipe/", fertilizerRoute);
 // Middleware to handle 404 errors
 
 // TODO: Make a middleware to handle errors

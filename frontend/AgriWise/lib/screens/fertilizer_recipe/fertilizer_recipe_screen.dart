@@ -11,7 +11,6 @@ class FertilizerRecipeScreen extends StatefulWidget {
 }
 
 class _FertilizerRecipeScreenState extends State<FertilizerRecipeScreen> {
-
   int _selectedIndex = 0; // 0 for Home since this is not Profile
   final TextEditingController _materialsController = TextEditingController();
   final TextEditingController _plantsController = TextEditingController();
@@ -47,12 +46,6 @@ class _FertilizerRecipeScreenState extends State<FertilizerRecipeScreen> {
             Navigator.pop(context);
           },
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.history, color: Colors.black),
-            onPressed: () {},
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -64,10 +57,7 @@ class _FertilizerRecipeScreenState extends State<FertilizerRecipeScreen> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(25),
-                  border: Border.all(
-                    color: const Color(0xffA8A8A8),
-                    width: 1,
-                  ),
+                  border: Border.all(color: const Color(0xffA8A8A8), width: 1),
                 ),
                 padding: const EdgeInsets.all(20),
                 child: Column(
@@ -75,10 +65,7 @@ class _FertilizerRecipeScreenState extends State<FertilizerRecipeScreen> {
                   children: [
                     const Text(
                       'Tell us what materials you have, and we\'ll help you create a fertilizer mix for your plants.',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.black87,
-                      ),
+                      style: TextStyle(fontSize: 14, color: Colors.black87),
                     ),
                     const SizedBox(height: 20),
 
@@ -91,28 +78,41 @@ class _FertilizerRecipeScreenState extends State<FertilizerRecipeScreen> {
                     ),
                     const SizedBox(height: 12),
                     Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                      ),
+                      decoration: BoxDecoration(color: Colors.white),
                       child: TextField(
                         controller: _materialsController,
                         decoration: InputDecoration(
                           hintText: 'manure, banana peel, ashes...',
-                          hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
+                          hintStyle: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 14,
+                          ),
                           filled: true,
                           fillColor: Colors.white,
-                          contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 15,
+                            vertical: 15,
+                          ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide(color: Color(0xffC9C9C9), width: 1),
+                            borderSide: BorderSide(
+                              color: Color(0xffC9C9C9),
+                              width: 1,
+                            ),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide(color: Color(0xffC9C9C9), width: 1),
+                            borderSide: BorderSide(
+                              color: Color(0xffC9C9C9),
+                              width: 1,
+                            ),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide(color: Color(0xffC9C9C9), width: 1),
+                            borderSide: BorderSide(
+                              color: Color(0xffC9C9C9),
+                              width: 1,
+                            ),
                           ),
                         ),
                         maxLines: 3,
@@ -130,9 +130,7 @@ class _FertilizerRecipeScreenState extends State<FertilizerRecipeScreen> {
                     ),
                     const SizedBox(height: 12),
                     Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                      ),
+                      decoration: BoxDecoration(color: Colors.white),
                       child: TextField(
                         controller: _plantsController,
                         decoration: InputDecoration(
@@ -149,15 +147,24 @@ class _FertilizerRecipeScreenState extends State<FertilizerRecipeScreen> {
                           ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide(color: Color(0xffC9C9C9), width: 1),
+                            borderSide: BorderSide(
+                              color: Color(0xffC9C9C9),
+                              width: 1,
+                            ),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide(color: Color(0xffC9C9C9), width: 1),
+                            borderSide: BorderSide(
+                              color: Color(0xffC9C9C9),
+                              width: 1,
+                            ),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide(color: Color(0xffC9C9C9), width: 1),
+                            borderSide: BorderSide(
+                              color: Color(0xffC9C9C9),
+                              width: 1,
+                            ),
                           ),
                         ),
                       ),
@@ -178,13 +185,16 @@ class _FertilizerRecipeScreenState extends State<FertilizerRecipeScreen> {
                                 _showRecipe = true;
                               });
 
-                              Future.delayed(const Duration(milliseconds: 100), () {
-                                Scrollable.ensureVisible(
-                                  context,
-                                  duration: const Duration(milliseconds: 300),
-                                  curve: Curves.easeInOut,
-                                );
-                              });
+                              Future.delayed(
+                                const Duration(milliseconds: 100),
+                                () {
+                                  Scrollable.ensureVisible(
+                                    context,
+                                    duration: const Duration(milliseconds: 300),
+                                    curve: Curves.easeInOut,
+                                  );
+                                },
+                              );
                             }
                           },
                           style: ElevatedButton.styleFrom(
@@ -276,13 +286,11 @@ class _FertilizerRecipeScreenState extends State<FertilizerRecipeScreen> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('• ', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-          Expanded(
-            child: Text(
-              text,
-              style: const TextStyle(fontSize: 14),
-            ),
+          const Text(
+            '• ',
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
           ),
+          Expanded(child: Text(text, style: const TextStyle(fontSize: 14))),
         ],
       ),
     );
@@ -300,9 +308,7 @@ class _FertilizerRecipeScreenState extends State<FertilizerRecipeScreen> {
             offset: const Offset(0, -1),
           ),
         ],
-        border: Border(
-          top: BorderSide(color: Colors.grey.shade300, width: 1),
-        ),
+        border: Border(top: BorderSide(color: Colors.grey.shade300, width: 1)),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 15),

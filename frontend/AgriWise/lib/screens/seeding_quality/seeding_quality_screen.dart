@@ -1,8 +1,10 @@
+import 'package:agriwise/screens/seeding_quality/result_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:agriwise/screens/seeding_quality/photo_preview_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'dart:io';
+import 'package:agriwise/services/http_service.dart';
+import 'package:agriwise/widgets/history_drawer.dart';
 
 import 'package:agriwise/screens/home_screen.dart';
 import 'package:agriwise/screens/profile_screen.dart';
@@ -18,6 +20,44 @@ class _SeedingQualityScreenState extends State<SeedingQualityScreen> {
   int _selectedIndex = 0; // 0 for Home since this is not Profile
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final ImagePicker _picker = ImagePicker();
+  Map<String, dynamic> history = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchHistory();
+  }
+
+  Future<void> _fetchHistory() async {
+    try {
+      final Map<String, dynamic> fetchedHistory =
+          await HttpService().getSeedQualityHistory();
+
+      setState(() {
+        history = fetchedHistory;
+      });
+    } catch (e) {
+      // Handle error
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error fetching history: $e')));
+    } finally {
+      if (history.containsKey('assessments') &&
+          history['assessments'] != null) {
+        for (var assessment in history['assessments']) {
+          final createdAt = assessment['createdAt'];
+          if (createdAt != null && createdAt['_seconds'] != null) {
+            final date = DateTime.fromMillisecondsSinceEpoch(
+              createdAt['_seconds'] * 1000,
+            );
+            final formattedDate =
+                '${date.day} - ${date.month.toString().padLeft(2, '0')}';
+            assessment['formattedDate'] = formattedDate;
+          }
+        }
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +79,11 @@ class _SeedingQualityScreenState extends State<SeedingQualityScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/home',
+              (Route<dynamic> route) => false,
+            );
           },
         ),
         actions: [
@@ -51,7 +95,21 @@ class _SeedingQualityScreenState extends State<SeedingQualityScreen> {
           ),
         ],
       ),
-      endDrawer: _buildHistoryDrawer(),
+      endDrawer: HistoryDrawer(
+        history: history,
+        onHistoryItemTap: (file, assessment) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder:
+                  (context) => SeedingQualityResultScreen(
+                    imageFile: file,
+                    result: assessment,
+                  ),
+            ),
+          );
+        },
+      ),
       body: Align(
         alignment: Alignment.topCenter,
         child: Container(
@@ -223,49 +281,6 @@ class _SeedingQualityScreenState extends State<SeedingQualityScreen> {
       MaterialPageRoute(
         builder:
             (context) => SeedingQualityPhotoPreviewScreen(imageFile: imageFile),
-      ),
-    );
-  }
-
-  // History drawer
-  Widget _buildHistoryDrawer() {
-    return Drawer(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.fromLTRB(20, 50, 20, 20),
-            child: const Row(
-              children: [
-                Icon(Icons.history, size: 24),
-                SizedBox(width: 10),
-                Text(
-                  'History',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-          ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Text(
-              'Recent',
-              style: TextStyle(color: Colors.grey, fontSize: 14),
-            ),
-          ),
-          const SizedBox(height: 10),
-
-          // Static data for now
-          ListTile(
-            title: const Text(
-              'Seed quality check - 3 May',
-              style: TextStyle(color: Colors.black, fontSize: 16),
-            ),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-        ],
       ),
     );
   }

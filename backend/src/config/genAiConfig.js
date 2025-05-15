@@ -2,6 +2,8 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { GEMINI_API_KEY } from "./envConfig.js";
 import diseaseSchema from "../schemas/detectionResponseSchema.js";
 import seedSchema from "../schemas/seedQualityResponseSchema.js";
+import freitizerSchema from "../schemas/fertilizerRecipeResponseSchema.js";
+
 /**
  * Instance of Google Generative AI initialized with API key
  * @type {GoogleGenerativeAI}
@@ -48,11 +50,21 @@ const seedStructureFun = {
   parameters: seedSchema,
 };
 
+const freitizerSchemaFun = {
+  name: "predict_fertilizer_recipe",
+  description:
+    "generate fertilizer recipe from an plant name and available materials and provides suggestions.",
+  parameters: freitizerSchema,
+}
 /**
  * Configuration for tool calling with structured function
  * @type {Object}
  * @property {Array} functionDeclarations - List of available functions for the model
  */
+
+const recipeToolConfig = {
+  functionDeclarations: [freitizerSchemaFun],
+}
 const disToolConfig = {
   functionDeclarations: [diseasePredStructureFun],
 };
@@ -110,7 +122,7 @@ const chatbotSysInstruction = `You are an expert agricultural assistant designed
 
 export {
   getModelInstance,
-  disToolConfig,
+  disToolConfig,recipeToolConfig,
   seedToolConfig,
   generationConfig,
   safetySettings,

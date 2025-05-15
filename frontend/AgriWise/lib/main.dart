@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,9 +36,9 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const HomeScreen(),
         '/splash': (context) => const SplashScreen(),
         '/seed_quality': (context) => const SeedingQualityScreen(),
-        '/disease_detection' :(context) => const DiseaseDetectionScreen(),
-        '/fertilizer_recipe' :(context) => const FertilizerRecipeScreen(),
-        '/pest_forecast' :(context) => const PestForecastScreen(),
+        '/disease_detection': (context) => const DiseaseDetectionScreen(),
+        '/fertilizer_recipe': (context) => const FertilizerRecipeScreen(),
+        '/pest_forecast': (context) => const PestForecastScreen(),
       },
     );
   }

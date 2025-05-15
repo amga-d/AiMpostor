@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:agriwise/services/auth_services.dart';
 import 'package:agriwise/screens/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -45,7 +46,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       TextSpan(
                         text:
                             username != null
-                                ? '${username[0].toUpperCase()}${username.substring(1)}!'
+                                ? (username.isNotEmpty
+                                    ? '${username[0].toUpperCase()}${username.substring(1)}!'
+                                    : 'User')
                                 : 'User',
                         style: const TextStyle(
                           fontSize: 24,
@@ -107,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             'assets/icons/disease_detection.svg',
                           ),
                           onTap: () {
-                              Navigator.pushNamed(context, '/disease_detection');
+                            Navigator.pushNamed(context, '/disease_detection');
                           },
                         ),
                         _buildFeatureCard(
@@ -115,7 +118,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           iconData: SvgPicture.asset(
                             'assets/icons/pest_forecast.svg',
                           ),
-                          onTap: () {Navigator.pushNamed(context, '/pest_forecast');},
+                          onTap: () {
+                            Navigator.pushNamed(context, '/pest_forecast');
+                          },
                         ),
                         _buildFeatureCard(
                           title: 'Seeding Quality',
@@ -123,16 +128,18 @@ class _HomeScreenState extends State<HomeScreen> {
                             'assets/icons/seeding_quality.svg',
                           ),
                           onTap: () {
-                              Navigator.pushNamed(context, '/seed_quality');
+                            Navigator.pushNamed(context, '/seed_quality');
                           },
                         ),
                         _buildFeatureCard(
                           title: 'Fertilizer Recipe',
                           iconData: SvgPicture.asset(
-                            'assets/icons/fertilizer2-removebg-preview.svg.svg',
+                            'assets/icons/fertilizer2-removebg-preview.svg',
+                            width: 70,
                           ),
+
                           onTap: () {
-                              Navigator.pushNamed(context, '/fertilizer_recipe');
+                            Navigator.pushNamed(context, '/fertilizer_recipe');
                           },
                         ),
                       ],
@@ -148,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-    Widget _buildBottomNavBar() {
+  Widget _buildBottomNavBar() {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -160,9 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
             offset: const Offset(0, -1),
           ),
         ],
-        border: Border(
-          top: BorderSide(color: Colors.grey.shade300, width: 1),
-        ),
+        border: Border(top: BorderSide(color: Colors.grey.shade300, width: 1)),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 15),
@@ -203,10 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           Icon(icon, color: color),
           const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(color: color, fontSize: 12),
-          ),
+          Text(label, style: TextStyle(color: color, fontSize: 12)),
         ],
       ),
     );
