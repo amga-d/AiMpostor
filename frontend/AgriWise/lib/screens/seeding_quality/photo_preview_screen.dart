@@ -121,7 +121,7 @@ class SeedingQualityPhotoPreviewScreen extends StatelessWidget {
                     height: 45,
                     child: ElevatedButton.icon(
                       onPressed: () {
-                        _analyzeImage(context, imageFile);
+                        _analyzeImage(context, File(imageFile.path));
                       },
                       icon: const Icon(Icons.check, color: Colors.white),
                       label: const Text(
@@ -150,7 +150,7 @@ class SeedingQualityPhotoPreviewScreen extends StatelessWidget {
     );
   }
 
-  void _analyzeImage(BuildContext context, XFile imageFile) {
+  void _analyzeImage(BuildContext context, File imageFile) {
     Navigator.push(
       context,
       MaterialPageRoute(

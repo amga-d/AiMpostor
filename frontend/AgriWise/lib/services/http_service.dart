@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import "package:http/http.dart" as http;
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -87,6 +89,99 @@ class HttpService {
     } else {
       final error = jsonDecode(response.body)['error'] ?? 'Unknown error';
       throw Exception('Failed to fetch chat history: $error');
+    }
+  }
+
+  Future<Map<String, dynamic>> predictSeedQuality(File imageFile) async {
+    String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
+    if (token == null) {
+      throw Exception('User is not authenticated');
+    }
+    final endpoint = "api/v1/seed/assess";
+    final mimeType = lookupMimeType(imageFile.path) ?? 'image/jpeg';
+    final fileName = path.basename(imageFile.path);
+
+    final request =
+        http.MultipartRequest('POST', Uri.parse('$baseUrl$endpoint'))
+          ..headers['Authorization'] = 'Bearer $token'
+          ..files.add(
+            await http.MultipartFile.fromPath(
+              'seedImage',
+              imageFile.path,
+              contentType: MediaType.parse(mimeType),
+              filename: fileName,
+            ),
+          );
+    final streamedResponse = await request.send();
+    final response = await http.Response.fromStream(streamedResponse);
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      final error = jsonDecode(response.body)['error'] ?? 'Unknown error';
+      throw Exception('Failed to Assess Seed Quality: $error');
+    }
+  }
+
+  Future<Map<String, dynamic>> getSeedQualityHistory() async {
+    String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
+    if (token == null) {
+      throw Exception('User is not authenticated');
+    }
+    final endpoint = "api/v1/seed/assessments";
+    final response = await http.get(
+      Uri.parse('$baseUrl$endpoint'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final responseBody = jsonDecode(response.body);
+      if (responseBody['data'] != null) {
+        return (responseBody['data']);
+      } else {
+        return {};
+      }
+    } else {
+      final error = jsonDecode(response.body)['error'] ?? 'Unknown error';
+      throw Exception('Failed to fetch seed quality history: $error');
+    }
+  }
+
+  Future<Map<String, dynamic>> getSeedQualityById(String assessmentId) async {
+    String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
+    if (token == null) {
+      throw Exception('User is not authenticated');
+    }
+    final endpoint = "api/v1/chats";
+    final response = await http.get(
+      Uri.parse('$baseUrl$endpoint/$assessmentId'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final responseBody = jsonDecode(response.body);
+      if (responseBody['data'] != null) {
+        return (responseBody['data']);
+      } else {
+        return {};
+      }
+    } else {
+      final error = jsonDecode(response.body)['error'] ?? 'Unknown error';
+      throw Exception('Failed to fetch disease history: $error');
+    }
+  }
+
+  Future<http.Response> get(String url) async {
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      return response;
+    } else {
+      throw Exception('Failed to load data');
     }
   }
 }
