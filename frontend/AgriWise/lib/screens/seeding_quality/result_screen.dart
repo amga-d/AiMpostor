@@ -4,11 +4,12 @@ import 'dart:io';
 
 class SeedingQualityResultScreen extends StatelessWidget {
   final XFile imageFile;
+  final Map<String, dynamic> result;
 
   const SeedingQualityResultScreen({
-    Key? key,
     required this.imageFile,
-  }) : super(key: key);
+    required this.result,
+  }) : super();
 
   @override
   Widget build(BuildContext context) {
@@ -47,10 +48,7 @@ class SeedingQualityResultScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
-            border: Border.all(
-              color: const Color(0xffA8A8A8),
-              width: 1,
-            ),
+            border: Border.all(color: const Color(0xffA8A8A8), width: 1),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,9 +77,12 @@ class SeedingQualityResultScreen extends StatelessWidget {
               ),
               const SizedBox(height: 12),
 
-              // Good seeds result
+              // Quality container
               Container(
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 10,
+                  horizontal: 16,
+                ),
                 decoration: BoxDecoration(
                   color: const Color(0xFFECF8ED),
                   borderRadius: BorderRadius.circular(8),
@@ -91,8 +92,8 @@ class SeedingQualityResultScreen extends StatelessWidget {
                     Container(
                       width: 20,
                       height: 20,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFF3C8D40),
+                      decoration: BoxDecoration(
+                        color: _getQualityColor(result['qualityAssessment']),
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(
@@ -102,12 +103,46 @@ class SeedingQualityResultScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 12),
-                    const Text(
-                      'These seeds are good',
+                    Text(
+                      'Quality: ${result['qualityAssessment']}',
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
-                        color: Color(0xFF3C8D40),
+                        color: _getQualityColor(result['qualityAssessment']),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 12),
+
+              // Recommendation container
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 10,
+                  horizontal: 16,
+                ),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFECF8ED),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(
+                      Icons.info_outline,
+                      color: Colors.green,
+                      size: 20,
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        'Recommendation: kj${result['recommendation']}',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
                   ],
@@ -119,6 +154,20 @@ class SeedingQualityResultScreen extends StatelessWidget {
       ),
       bottomNavigationBar: _buildBottomNavBar(),
     );
+  }
+
+  // Method to get quality color based on quality assessment
+  Color _getQualityColor(String qualityAssessment) {
+    switch (qualityAssessment.toLowerCase()) {
+      case 'high quality':
+        return Colors.green;
+      case 'medium quality':
+        return Colors.orange;
+      case 'low quality':
+        return Colors.red;
+      default:
+        return Colors.grey;
+    }
   }
 
   // Bottom navigation bar
@@ -134,9 +183,7 @@ class SeedingQualityResultScreen extends StatelessWidget {
             offset: const Offset(0, -1),
           ),
         ],
-        border: Border(
-          top: BorderSide(color: Colors.grey.shade300, width: 1),
-        ),
+        border: Border(top: BorderSide(color: Colors.grey.shade300, width: 1)),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 15),
@@ -159,10 +206,7 @@ class SeedingQualityResultScreen extends StatelessWidget {
       children: [
         Icon(icon, color: color),
         const SizedBox(height: 4),
-        Text(
-          label,
-          style: TextStyle(color: color, fontSize: 12),
-        ),
+        Text(label, style: TextStyle(color: color, fontSize: 12)),
       ],
     );
   }

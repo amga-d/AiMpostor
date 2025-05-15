@@ -124,7 +124,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           iconData: SvgPicture.asset(
                             'assets/icons/seeding_quality.svg',
                           ),
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.pushNamed(context, '/seed_quality');
+                          },
                         ),
                         _buildFeatureCard(
                           title: 'Fertilizer Recipe',
@@ -132,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             'assets/icons/ferilizer_recipe.svg',
                           ),
                           onTap: () async {
-                            await AuthService().signout(context: context);
+                            Navigator.pushNamed(context, '/disease_detection');
                           },
                         ),
                       ],

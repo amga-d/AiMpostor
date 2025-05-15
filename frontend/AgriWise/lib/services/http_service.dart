@@ -89,4 +89,34 @@ class HttpService {
       throw Exception('Failed to fetch chat history: $error');
     }
   }
+
+  Future<Map<String, dynamic>> predictSeedQuality(XFile imageFile) async {
+    String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
+    if (token == null) {
+      throw Exception('User is not authenticated');
+    }
+    final endpoint = "api/v1/seed/assess";
+    final mimeType = lookupMimeType(imageFile.path) ?? 'image/jpeg';
+    final fileName = path.basename(imageFile.path);
+
+    final request =
+        http.MultipartRequest('POST', Uri.parse('$baseUrl$endpoint'))
+          ..headers['Authorization'] = 'Bearer $token'
+          ..files.add(
+            await http.MultipartFile.fromPath(
+              'seedImage',
+              imageFile.path,
+              contentType: MediaType.parse(mimeType),
+              filename: fileName,
+            ),
+          );
+    final streamedResponse = await request.send();
+    final response = await http.Response.fromStream(streamedResponse);
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      final error = jsonDecode(response.body)['error'] ?? 'Unknown error';
+      throw Exception('Failed to Assess Seed Quality: $error');
+    }
+  }
 }

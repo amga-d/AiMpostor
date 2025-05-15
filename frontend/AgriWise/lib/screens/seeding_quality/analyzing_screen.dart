@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:agriwise/services/http_service.dart';
 import 'package:flutter/material.dart';
 import 'package:agriwise/screens/seeding_quality/result_screen.dart';
 import 'package:image_picker/image_picker.dart';
@@ -6,8 +9,7 @@ import 'dart:async';
 class SeedingQualityAnalyzingScreen extends StatefulWidget {
   final XFile imageFile;
 
-  const SeedingQualityAnalyzingScreen({Key? key, required this.imageFile})
-    : super(key: key);
+  const SeedingQualityAnalyzingScreen({required this.imageFile}) : super();
 
   @override
   State<SeedingQualityAnalyzingScreen> createState() =>
@@ -30,20 +32,26 @@ class _SeedingQualityAnalyzingScreenState
       });
     });
 
-    // Simulate analysis delay
-    Timer(const Duration(seconds: 3), () {
-      _timer?.cancel();
-
-      // For now, just navigate to result screen
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder:
-              (context) =>
-                  SeedingQualityResultScreen(imageFile: widget.imageFile),
-        ),
-      );
-    });
+    HttpService()
+        .predictSeedQuality(widget.imageFile)
+        .then((result) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder:
+                  (context) => SeedingQualityResultScreen(
+                    imageFile: widget.imageFile,
+                    result: result,
+                  ),
+            ),
+          );
+        })
+        .catchError((error) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Error: $error')));
+          Navigator.pop(context);
+        });
   }
 
   @override

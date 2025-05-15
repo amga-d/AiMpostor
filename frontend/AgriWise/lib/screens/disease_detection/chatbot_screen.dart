@@ -46,7 +46,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
           try {
             final data = jsonDecode(message.text);
             if (data is Map && data.containsKey('detectedDisease')) {
-              _diseaseData = data;
+              _diseaseData = data.cast<String, dynamic>();
               // Remove this message from the chat display
               messages.removeAt(i);
               break;
@@ -70,7 +70,10 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
         // Add fallback messages if there's an error
         _messages = [
           ChatMessage(
-            text: "Hello, how can I help you?",
+            text:
+                _diseaseData != null
+                    ? _diseaseData.toString()
+                    : 'Error loading chat history.',
             isUser: false,
             timestamp: DateTime.now(),
           ),
