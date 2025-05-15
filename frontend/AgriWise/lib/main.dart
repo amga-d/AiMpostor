@@ -1,6 +1,7 @@
 import 'package:agriwise/screens/disease_detection/disease_detection_screen.dart';
 import 'package:agriwise/screens/home_screen.dart';
 import 'package:agriwise/screens/login_screen.dart';
+import 'package:agriwise/screens/pest_forecast/pest_forecast_screen.dart';
 import 'package:agriwise/screens/register_screen.dart';
 import 'package:agriwise/screens/splash_screen.dart';
 import 'package:agriwise/screens/seeding_quality/seeding_quality_screen.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,6 +38,7 @@ class MyApp extends StatelessWidget {
         '/seed_quality': (context) => const SeedingQualityScreen(),
         '/disease_detection': (context) => const DiseaseDetectionScreen(),
         '/fertilizer_recipe': (context) => const FertilizerRecipeScreen(),
+        '/pest_forecast': (context) => const PestForecastScreen(),
       },
     );
   }

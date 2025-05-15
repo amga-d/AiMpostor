@@ -176,12 +176,44 @@ class HttpService {
     }
   }
 
-  Future<http.Response> get(String url) async {
-    final response = await http.get(Uri.parse(url));
+  Future<Map<String, dynamic>> getFertilizerRecipe(
+    String plant,
+    String availableMaterials,
+  ) async {
+    String? token = await FirebaseAuth.instance.currentUser?.getIdToken();
+    if (token == null) {
+      throw Exception('User is not authenticated');
+    }
+    final endpoint = "api/v1/fertilizer-recipe";
+    final response = await http.post(
+      Uri.parse('$baseUrl$endpoint'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        'plant': plant,
+        'availableMaterials': availableMaterials,
+      }),
+    );
+
     if (response.statusCode == 200) {
-      return response;
+      final responseBody = jsonDecode(response.body);
+      if (responseBody['response'] != null &&
+          responseBody['response']['message'] == 'success') {
+        return responseBody['response']['data'];
+      } else {
+        throw Exception(
+          responseBody['response']?['error'] ?? 'Unknown error occurred',
+        );
+      }
+    } else if (response.statusCode == 400) {
+      final error = jsonDecode(response.body)['error'] ?? 'Invalid input';
+      throw Exception('Failed to generate fertilizer recipe: $error');
     } else {
-      throw Exception('Failed to load data');
+      throw Exception(
+        'Failed to generate fertilizer recipe: Internal server error',
+      );
     }
   }
 }
