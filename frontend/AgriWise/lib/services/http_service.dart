@@ -7,10 +7,12 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:path/path.dart' as path;
 import 'package:http_parser/http_parser.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+Future<void> load() async {}
 
 class HttpService {
-  final String baseUrl =
-      'https://aimpostor-889491896780.asia-southeast2.run.app/';
+  final String baseUrl = dotenv.env['BASE_URL'] ?? 'https://aimpostor.app/';
 
   Future<void> signupUser(String token, String name) async {
     final endpoint = "api/v1/user/signup";

@@ -8,12 +8,14 @@ import 'package:agriwise/screens/seeding_quality/seeding_quality_screen.dart';
 import 'package:agriwise/screens/fertilizer_recipe/fertilizer_recipe_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await dotenv.load();
   runApp(const MyApp());
 }
 
