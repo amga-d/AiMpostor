@@ -17,11 +17,13 @@ AiMpostor leverages AI technology to help farmers and agricultural professionals
 ## 🛠️ Tech Stack
 
 ### Frontend (AgriWise Mobile App)
+
 - **Framework**: Flutter
 - **Authentication**: Firebase Auth
-- **State Management**: Provider/Bloc 
+- **State Management**: Provider/Bloc
 
 ### Backend
+
 - **Server**: Node.js
 - **Storage**: Google Cloud Storage
 - **Database**: Firestore
@@ -46,7 +48,7 @@ AiMpostor/
 │   ├── dockerfile          # Docker configuration
 │   └── server.js           # Main entry point
 │
-└── frontend/              
+└── frontend/
     └── AgriWise/           # Flutter mobile application
         ├── assets/         # Static assets (fonts, icons)
         └── lib/
@@ -84,17 +86,20 @@ AiMpostor/
 ### Backend Setup
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/Wibson27/AiMpostor.git
    cd AiMpostor/backend
    ```
 
 2. Install dependencies:
+
    ```bash
    npm install
    ```
 
 3. Create a `.env` file based on `.env.example`:
+
    ```
    PORT=5000
    FIREBASE_API_KEY=your-firebase-api-key
@@ -110,18 +115,26 @@ AiMpostor/
 ### Frontend Setup
 
 1. Navigate to the frontend directory:
+
    ```bash
    cd ../frontend/AgriWise
    ```
 
 2. Install Flutter dependencies:
+
    ```bash
    flutter pub get
    ```
 
 3. Update `firebase_options.dart` with your Firebase configuration
 
-4. Update the API endpoint in `services/http_service.dart` to point to your backend server
+4. Create an `.env` file in the project root:
+
+   ```
+   BASE_URL=https://aimpostor-889491896780.asia-southeast2.run.app
+   ```
+
+   > If you have hosted the backend server elsewhere, you can specify its public URL here instead.
 
 5. Run the application:
    ```bash
@@ -131,13 +144,16 @@ AiMpostor/
 ## 🚀 Deployment
 
 ### Backend
+
+After setting up your `.env` file (see `backend/README.md` for detailed instructions), you can build and run the backend using Docker:
+
 ```bash
-# Using Docker
 docker build -t aimpostor-backend .
-docker run -p 5000:5000 aimpostor-backend
+docker run -p 8080:8080 --env-file .env aimpostor-backend
 ```
 
 ### Frontend
+
 ```bash
 # Build APK
 flutter build apk --release
@@ -169,7 +185,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📫 Contact
 
-For questions or support, please open an issue or contact us at [23523001@students.uii.ac.id]
+For questions or support, please contact us at [23523242@students.uii.ac.id](mailto:23523242@students.uii.ac.id) or [23523001@students.uii.ac.id](mailto:23523001@students.uii.ac.id)
 
 ---
 
