@@ -9,13 +9,11 @@ import 'package:path/path.dart' as path;
 import 'package:http_parser/http_parser.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-Future<void> load() async {}
-
 class HttpService {
   final String baseUrl = dotenv.env['BASE_URL'] ?? 'https://aimpostor.app/';
 
   Future<void> signupUser(String token, String name) async {
-    final endpoint = "api/v1/user/signup";
+    final endpoint = "/api/v1/user/signup";
     final response = await http.post(
       Uri.parse('$baseUrl$endpoint'),
       headers: <String, String>{
@@ -36,7 +34,7 @@ class HttpService {
     if (token == null) {
       throw Exception('User is not authenticated');
     }
-    final endpoint = "api/v1/chats/upload";
+    final endpoint = "/api/v1/chats/upload";
 
     final mimeType = lookupMimeType(imageFile.path) ?? 'image/jpeg';
     final fileName = path.basename(imageFile.path);
@@ -67,7 +65,7 @@ class HttpService {
     if (token == null) {
       throw Exception('User is not authenticated');
     }
-    final endpoint = "api/v1/seed/assess";
+    final endpoint = "/api/v1/seed/assess";
     final mimeType = lookupMimeType(imageFile.path) ?? 'image/jpeg';
     final fileName = path.basename(imageFile.path);
 
@@ -97,7 +95,7 @@ class HttpService {
     if (token == null) {
       throw Exception('User is not authenticated');
     }
-    final endpoint = "api/v1/seed/assessments";
+    final endpoint = "/api/v1/seed/assessments";
     final response = await http.get(
       Uri.parse('$baseUrl$endpoint'),
       headers: {
@@ -124,7 +122,7 @@ class HttpService {
     if (token == null) {
       throw Exception('User is not authenticated');
     }
-    final endpoint = "api/v1/chats";
+    final endpoint = "/api/v1/chats";
     final response = await http.get(
       Uri.parse('$baseUrl$endpoint/$assessmentId'),
       headers: {
@@ -154,7 +152,7 @@ class HttpService {
     if (token == null) {
       throw Exception('User is not authenticated');
     }
-    final endpoint = "api/v1/fertilizer-recipe";
+    final endpoint = "/api/v1/fertilizer-recipe";
     final response = await http.post(
       Uri.parse('$baseUrl$endpoint'),
       headers: {
@@ -198,7 +196,7 @@ class HttpService {
       throw Exception('User is not authenticated');
     }
 
-    final endpoint = "api/v1/chats/$chatId";
+    final endpoint = "/api/v1/chats/$chatId";
 
     final response = await http.get(
       Uri.parse('$baseUrl$endpoint'),
@@ -228,7 +226,7 @@ class HttpService {
     if (token == null) {
       throw Exception('User is not authenticated');
     }
-    final endpoint = "api/v1/chats/chat";
+    final endpoint = "/api/v1/chats/chat";
 
     final response = await http.post(
       Uri.parse('$baseUrl$endpoint'),
@@ -266,7 +264,7 @@ class HttpService {
     if (token == null) {
       throw Exception('User is not authenticated');
     }
-    final endpoint = "api/v1/chats/";
+    final endpoint = "/api/v1/chats/";
     final response = await http.get(
       Uri.parse('$baseUrl$endpoint'),
       headers: {
