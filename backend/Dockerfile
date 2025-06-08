@@ -10,5 +10,4 @@ COPY . ./
 
 EXPOSE 8080
 
-
-ENTRYPOINT ["node" , "server.js"]
+ENTRYPOINT ["npm" , "start"]

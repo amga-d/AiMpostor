@@ -1,3 +1,61 @@
+# Node modules
+node_modules
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Environment variables
+.env
+.env.*
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Secrets
+secrets
+*secrets.json
+
+# Git
+.git
+.gitignore
+.github
+
+# Build artifacts
+dist
+build
+out
+coverage
+
+# Logs
+logs
+*.log
+
+# IDE settings
+.idea
+.vscode
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Test files
+__tests__
+test
+tests
+*.spec.js
+*.test.js
+
+# Documentation
+docs
+*.md
+
+# Docker
+Dockerfile*
+docker-compose*
+
 
 node_modules/
 .gitignore
